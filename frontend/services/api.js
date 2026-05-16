@@ -88,4 +88,8 @@ export const aiAPI = {
   getRecommendations: () => api.get('/ai/recommendations'),
 };
 
+export const dietAPI = {
+  getDietPlan: (workoutType) => api.get('/diet', { params: { workoutType } }),
+};
+
 export default api;

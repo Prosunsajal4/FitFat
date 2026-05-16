@@ -8,6 +8,7 @@ const navItems = [
   { name: 'Dashboard', path: '/dashboard', icon: '📊' },
   { name: 'Workouts', path: '/workouts', icon: '💪' },
   { name: 'AI Workout', path: '/ai-workout', icon: '🤖' },
+  { name: 'Diet Plan', path: '/diet', icon: '🍛' },
   { name: 'Progress', path: '/progress', icon: '📈' },
   { name: 'Nutrition', path: '/nutrition', icon: '🥗' },
   { name: 'AI Coach', path: '/coach', icon: '💬' },

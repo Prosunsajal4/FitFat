@@ -7,6 +7,7 @@ const workoutRoutes = require("./routes/workoutRoutes");
 const progressRoutes = require("./routes/progressRoutes");
 const nutritionRoutes = require("./routes/nutritionRoutes");
 const aiRoutes = require("./routes/aiRoutes");
+const dietRoutes = require("./routes/dietRoutes");
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.use("/api/workouts", workoutRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api/nutrition", nutritionRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/diet", dietRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.message);
