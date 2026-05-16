@@ -1,58 +1,78 @@
-const OpenAI = require('openai');
 const Chat = require('../models/Chat');
 const User = require('../models/User');
 const Workout = require('../models/Workout');
 const Nutrition = require('../models/Nutrition');
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'sk-your-api-key-here'
-});
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_NEW;
+
+const callGeminiAPI = async (prompt, systemPrompt = '') => {
+  const fullPrompt = systemPrompt ? `${systemPrompt}\n\nUser: ${prompt}` : prompt;
+
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: fullPrompt
+          }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 2048,
+          topP: 0.95,
+          topK: 40
+        }
+      })
+    }
+  );
+
+  const data = await response.json();
+
+  if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+    return data.candidates[0].content.parts[0].text;
+  }
+
+  throw new Error(data.error?.message || 'Gemini API error');
+};
 
 const generateWorkoutPlan = async (req, res) => {
   try {
     const { goal, weight, height, age, experience, equipment } = req.body;
 
-    let prompt = `Create a detailed weekly workout plan for someone with the following profile:\n`;
-    prompt += `- Goal: ${goal}\n`;
-    prompt += `- Weight: ${weight}kg\n`;
-    prompt += `- Height: ${height}cm\n`;
-    prompt += `- Age: ${age}\n`;
-    prompt += `- Experience level: ${experience}\n`;
-    prompt += `- Available equipment: ${equipment || 'full gym'}\n\n`;
+    const systemPrompt = `You are a professional fitness trainer and nutrition coach. Create detailed, personalized workout plans based on user goals and body stats. Be specific with exercises, sets, reps, and rest periods. Always respond in valid JSON format.`;
 
-    prompt += `Please provide a 7-day workout plan with:\n`;
-    prompt += `- Day name (e.g., Push, Pull, Legs, Rest)\n`;
-    prompt += `- For each workout day: exercises with sets and reps\n`;
-    prompt += `- Rest day recommendations\n`;
-    prompt += `- Tips for the specific goal\n\n`;
-    prompt += `Format the response as a structured plan that can be easily parsed.`;
+    const prompt = `Create a detailed weekly workout plan for someone with the following profile:
+- Goal: ${goal}
+- Weight: ${weight}kg
+- Height: ${height}cm
+- Age: ${age}
+- Experience level: ${experience}
+- Available equipment: ${equipment || 'full gym'}
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: "You are a professional fitness trainer and nutrition coach. Create detailed, personalized workout plans based on user goals and body stats. Be specific with exercises, sets, reps, and rest periods."
-        },
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
-      temperature: 0.7,
-      max_tokens: 1500
-    });
+Please provide a 7-day workout plan with day names (Push, Pull, Legs, Rest, etc.) and for each workout day include exercises with name, sets, reps, and notes. Format the response as a JSON array like:
+[{"day": "Push", "exercises": [{"name": "Bench Press", "sets": 4, "reps": "8-10", "notes": "Compound movement"}]}]`;
 
-    const plan = completion.choices[0].message.content;
+    const planText = await callGeminiAPI(prompt, systemPrompt);
 
-    const parsedPlan = parseWorkoutPlan(plan);
+    let parsedPlan;
+    try {
+      parsedPlan = JSON.parse(planText);
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      parsedPlan = parseWorkoutPlan(planText);
+    }
 
     res.json({
       plan: parsedPlan,
-      rawPlan: plan
+      rawPlan: planText
     });
   } catch (error) {
-    console.error('OpenAI Error:', error);
+    console.error('Gemini API Error:', error);
 
     const fallbackPlan = generateFallbackPlan(req.body);
     res.json({
@@ -69,7 +89,7 @@ const parseWorkoutPlan = (planText) => {
   let currentDay = null;
 
   lines.forEach(line => {
-    const dayMatch = line.match(/^(Day\s*\d+|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Push|Pull|Legs|Rest):?/i);
+    const dayMatch = line.match(/^(Day\s*\d+|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Push|Pull|Legs|Rest|Upper|Lower|Full):?/i);
 
     if (dayMatch) {
       if (currentDay) days.push(currentDay);
@@ -78,7 +98,7 @@ const parseWorkoutPlan = (planText) => {
         exercises: []
       };
     } else if (currentDay && line.trim()) {
-      const exerciseMatch = line.match(/^[-•*]?\s*(\d+\.)?\s*([^:]+):\s*(.+)/i);
+      const exerciseMatch = line.match(/^[-•*]?\s*(\d+\.)?\s*([^:]+):?\s*(.+)/i);
       if (exerciseMatch) {
         const repsMatch = line.match(/(\d+)-(\d+)\s*(reps|rep)/i) || line.match(/(\d+)\s*(reps|rep)/i);
         const setsMatch = line.match(/(\d+)\s*sets?/i);
@@ -95,7 +115,7 @@ const parseWorkoutPlan = (planText) => {
 
   if (currentDay) days.push(currentDay);
 
-  return days.length > 0 ? days : generateFallbackPlan(req.body);
+  return days.length > 0 ? days : generateFallbackPlan({});
 };
 
 const generateFallbackPlan = (profile) => {
@@ -326,51 +346,33 @@ const chatWithAI = async (req, res) => {
       }
     });
 
-    let context = `You are FitFat, an AI fitness coach. The user is ${user?.name || 'a fitness enthusiast'}.\n`;
-    context += `Their goal is: ${user?.goal || 'maintenance'}\n`;
-    context += `Experience level: ${user?.experience || 'beginner'}\n`;
-    context += `Current stats - Streak: ${user?.stats?.streak || 0} days, Total workouts: ${user?.stats?.totalWorkouts || 0}, Level: ${user?.stats?.level || 1}\n`;
+    let context = `You are FitFat, an AI fitness coach. You are helpful, motivating, and knowledgeable about fitness, nutrition, and training. `;
+    context += `User profile: ${user?.name || 'Fitness enthusiast'}, Goal: ${user?.goal || 'maintenance'}, Experience: ${user?.experience || 'beginner'}. `;
+    context += `Stats - Streak: ${user?.stats?.streak || 0} days, Total workouts: ${user?.stats?.totalWorkouts || 0}, Level: ${user?.stats?.level || 1}. `;
 
     if (user?.body?.weight) {
-      context += `Body stats - Weight: ${user.body.weight}kg, Body Fat: ${user.body.bodyFat || 'unknown'}%\n`;
+      context += `Body stats - Weight: ${user.body.weight}kg, Body Fat: ${user.body.bodyFat || 'unknown'}%. `;
     }
 
     if (recentWorkouts.length > 0) {
-      context += `\nRecent workouts:\n`;
+      context += `Recent workouts: `;
       recentWorkouts.forEach(w => {
-        context += `- ${w.name} on ${new Date(w.date).toLocaleDateString()}, ${w.exercises.length} exercises, ${w.totalVolume} total volume\n`;
+        context += `${w.name} (${new Date(w.date).toLocaleDateString()}), `;
       });
     }
 
     if (nutrition) {
-      context += `\nToday's nutrition: ${nutrition.totalCalories} calories, ${nutrition.totalProtein}g protein, ${nutrition.waterIntake} glasses of water\n`;
+      context += `Today's nutrition: ${nutrition.totalCalories} calories, ${nutrition.totalProtein}g protein, ${nutrition.waterIntake} glasses of water. `;
     }
 
-    context += `\nUser message: ${message}\n`;
-    context += `\nProvide helpful, motivating fitness advice. Keep responses concise but informative. Use emojis sparingly to add motivation.`;
+    context += `\n\nUser asks: ${message}\n\nProvide a helpful, concise response with fitness advice. Use emojis sparingly.`;
+
+    const response = await callGeminiAPI(context);
 
     let chatHistory = await Chat.findOne({ user: req.user._id });
     if (!chatHistory) {
       chatHistory = await Chat.create({ user: req.user._id, messages: [] });
     }
-
-    const messages = chatHistory.messages.slice(-10).map(m => ({
-      role: m.role,
-      content: m.content
-    }));
-
-    messages.unshift({ role: "system", content: context });
-
-    messages.push({ role: "user", content: message });
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: messages,
-      temperature: 0.8,
-      max_tokens: 500
-    });
-
-    const response = completion.choices[0].message.content;
 
     chatHistory.messages.push(
       { role: 'user', content: message },
