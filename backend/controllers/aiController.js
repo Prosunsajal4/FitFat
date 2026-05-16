@@ -483,41 +483,6 @@ const getSmartFallbackResponse = (message) => {
   
   return responses.default[Math.floor(Math.random() * responses.default.length)];
 };
-    );
-
-    if (chatHistory.messages.length > 50) {
-      chatHistory.messages = chatHistory.messages.slice(-50);
-    }
-
-    chatHistory.lastMessageAt = new Date();
-    await chatHistory.save();
-
-    res.json({ response });
-  } catch (error) {
-    console.error('Chat Error:', error);
-
-    const fallbackResponses = [
-      "Keep pushing! Every workout counts towards your goals. 💪",
-      "Remember: consistency beats intensity. Small steps every day lead to big results!",
-      "Stay focused on your journey. The only bad workout is the one that didn't happen.",
-      "Your body can do it, your mind needs to believe it. You've got this! 🔥",
-      "Progress isn't always visible, but it's always happening. Trust the process!"
-    ];
-
-    const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-
-    let chatHistory = await Chat.findOne({ user: req.user._id });
-    if (chatHistory) {
-      chatHistory.messages.push(
-        { role: 'user', content: req.body.message },
-        { role: 'assistant', content: randomResponse }
-      );
-      await chatHistory.save();
-    }
-
-    res.json({ response: randomResponse, isFallback: true });
-  }
-};
 
 const getChatHistory = async (req, res) => {
   try {

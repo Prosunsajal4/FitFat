@@ -1,4 +1,3 @@
-require("dotenv").config({ path: ".env" });
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -29,11 +28,8 @@ const connectDB = async () => {
       return;
     }
     await mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 30000,
-      socketTimeoutMS: 45000,
-      connectTimeoutMS: 30000
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 30000,
     });
     mongoConnected = true;
     console.log("MongoDB Connected");
@@ -60,6 +56,7 @@ app.use("/api/nutrition", nutritionRoutes);
 app.use("/api/ai", aiRoutes);
 
 app.use((err, req, res, next) => {
+  console.error(err.message);
   res.status(500).json({ message: "Server error" });
 });
 
