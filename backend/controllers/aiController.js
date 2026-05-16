@@ -332,51 +332,157 @@ const generateFallbackPlan = (profile) => {
 const chatWithAI = async (req, res) => {
   try {
     const { message } = req.body;
+    
+    let user = null;
+    let recentWorkouts = [];
+    let nutrition = null;
 
-    const user = await User.findById(req.user._id);
-    const recentWorkouts = await Workout.find({ user: req.user._id })
-      .sort({ date: -1 })
-      .limit(5);
+    try {
+      user = await User.findById(req.user._id);
+      recentWorkouts = await Workout.find({ user: req.user._id })
+        .sort({ date: -1 })
+        .limit(5);
 
-    const nutrition = await Nutrition.findOne({
-      user: req.user._id,
-      date: {
-        $gte: new Date(new Date().setHours(0, 0, 0, 0)),
-        $lt: new Date(new Date().setHours(23, 59, 59, 999))
-      }
-    });
-
-    let context = `You are FitFat, an AI fitness coach. You are helpful, motivating, and knowledgeable about fitness, nutrition, and training. `;
-    context += `User profile: ${user?.name || 'Fitness enthusiast'}, Goal: ${user?.goal || 'maintenance'}, Experience: ${user?.experience || 'beginner'}. `;
-    context += `Stats - Streak: ${user?.stats?.streak || 0} days, Total workouts: ${user?.stats?.totalWorkouts || 0}, Level: ${user?.stats?.level || 1}. `;
-
-    if (user?.body?.weight) {
-      context += `Body stats - Weight: ${user.body.weight}kg, Body Fat: ${user.body.bodyFat || 'unknown'}%. `;
-    }
-
-    if (recentWorkouts.length > 0) {
-      context += `Recent workouts: `;
-      recentWorkouts.forEach(w => {
-        context += `${w.name} (${new Date(w.date).toLocaleDateString()}), `;
+      nutrition = await Nutrition.findOne({
+        user: req.user._id,
+        date: {
+          $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+          $lt: new Date(new Date().setHours(23, 59, 59, 999))
+        }
       });
+    } catch (dbError) {
+      console.log('DB error in chat:', dbError.message);
     }
 
-    if (nutrition) {
-      context += `Today's nutrition: ${nutrition.totalCalories} calories, ${nutrition.totalProtein}g protein, ${nutrition.waterIntake} glasses of water. `;
+    let context = `You are FitFat, a friendly and knowledgeable AI fitness coach. `;
+    context += `Your goal is to help users with their fitness journey by providing advice on workouts, nutrition, training tips, and motivation. `;
+    context += `Keep responses conversational, encouraging, and practical. Use simple language. `;
+    
+    if (user) {
+      context += `\nUser: ${user.name}. Goal: ${user.goal || 'fitness'}. Experience: ${user.experience || 'beginner'}. `;
+      context += `Stats: ${user.stats?.streak || 0} day streak, ${user.stats?.totalWorkouts || 0} workouts, Level ${user.stats?.level || 1}. `;
+      if (user.body?.weight) {
+        context += `Weight: ${user.body.weight}kg. `;
+      }
     }
 
-    context += `\n\nUser asks: ${message}\n\nProvide a helpful, concise response with fitness advice. Use emojis sparingly.`;
+    context += `\n\nUser's question: ${message}\n\n`;
+    context += `Provide a direct, helpful answer. If you don't have specific user data, give general fitness advice.`;
 
-    const response = await callGeminiAPI(context);
-
-    let chatHistory = await Chat.findOne({ user: req.user._id });
-    if (!chatHistory) {
-      chatHistory = await Chat.create({ user: req.user._id, messages: [] });
+    let response;
+    try {
+      response = await callGeminiAPI(context);
+    } catch (aiError) {
+      console.log('AI Error:', aiError.message);
+      response = getSmartFallbackResponse(message);
     }
 
-    chatHistory.messages.push(
-      { role: 'user', content: message },
-      { role: 'assistant', content: response }
+    try {
+      let chatHistory = await Chat.findOne({ user: req.user._id });
+      if (!chatHistory) {
+        chatHistory = await Chat.create({ user: req.user._id, messages: [] });
+      }
+
+      chatHistory.messages.push(
+        { role: 'user', content: message },
+        { role: 'assistant', content: response }
+      );
+
+      if (chatHistory.messages.length > 50) {
+        chatHistory.messages = chatHistory.messages.slice(-50);
+      }
+
+      chatHistory.lastMessageAt = new Date();
+      await chatHistory.save();
+    } catch (chatError) {
+      console.log('Chat save error:', chatError.message);
+    }
+
+    res.json({ response });
+  } catch (error) {
+    console.error('Chat Error:', error);
+    res.json({ response: getSmartFallbackResponse(req.body.message) });
+  }
+};
+
+const getSmartFallbackResponse = (message) => {
+  const msg = (message || '').toLowerCase();
+  
+  const responses = {
+    greeting: [
+      "Hey there! 👋 I'm your FitFat AI coach. How can I help you with your fitness today?",
+      "Hi! 💪 Ready to help you with your fitness journey. What do you want to know?",
+      "Hey! 🚀 Let's talk fitness! What's on your mind?"
+    ],
+    workout: [
+      "For building muscle, focus on compound exercises like squats, deadlifts, and bench press. Aim for 8-12 reps and 3-4 sets. Progressive overload is key! 💪",
+      "Great workout question! For strength, focus on lower reps (5-8) with heavier weights. For hypertrophy, stick to 8-12 reps. Always warm up properly! 🔥"
+    ],
+    nutrition: [
+      "For nutrition, focus on protein intake (1.6-2g per kg bodyweight), complex carbs for energy, and healthy fats. Stay hydrated! 🥗",
+      "Nutrition basics: Eat protein with every meal (chicken, fish, eggs, legumes), include vegetables, and drink 2-3L water daily. Avoid processed foods! 🍎"
+    ],
+    weight_loss: [
+      "For fat loss, create a calorie deficit (300-500 calories below maintenance), do both cardio and strength training, and get 7-8 hours sleep. Consistency is key! 🔥",
+      "Fat loss tips: High protein diet, compound exercises, HIIT workouts, and adequate sleep. Track your calories and stay consistent! ⚡"
+    ],
+    muscle: [
+      "To build muscle, focus on progressive overload - gradually increase weight, reps, or sets. Train each muscle group 2x per week and eat enough protein! 💪",
+      "Muscle building requires: Heavy compound lifts, 8-12 reps, 3-4 sets per exercise, 1g protein per lb bodyweight, and proper rest. Sleep is when muscles grow! 😴"
+    ],
+    cardio: [
+      "Cardio for fitness: Start with 20-30 mins, 3-4 times per week. Mix steady state (running, cycling) with HIIT for best results! 🏃",
+      "Cardio tips: Do cardio after weights or on rest days. Start slow and gradually increase intensity. Both morning and evening cardio have benefits! ⏰"
+    ],
+    rest: [
+      "Rest is crucial! Your muscles grow during recovery, not during workouts. Take 1-2 rest days per week, sleep 7-9 hours, and stretch! 🧘",
+      "Recovery matters: Sleep 7-9 hours, stretch daily, stay hydrated, and listen to your body. Overtraining leads to injury and burnout! ⚠️"
+    ],
+    beginner: [
+      "As a beginner, start with full body workouts 3x per week. Focus on learning proper form first. Don't worry about heavy weights - focus on consistency! 🏋️",
+      "Beginner tips: Start light, master form, be consistent. You don't need fancy equipment - bodyweight exercises work great! Just start! 🌟"
+    ],
+    motivation: [
+      "Remember: Progress takes time. Every workout counts! Stay consistent, trust the process, and celebrate small wins. You've got this! 🔥",
+      "Motivation: The only bad workout is the one that didn't happen. Show up, do your best, and remember why you started. You're stronger than you think! 💪"
+    ],
+    default: [
+      "Great question! For personalized advice, complete your profile and log some workouts. In general: consistency beats intensity, proper form beats heavy weights! 💪",
+      "Thanks for asking! The best approach: balanced diet, regular exercise, adequate sleep, and patience. Fitness is a journey, not a destination! 🌟",
+      "I'd be happy to help more! Update your profile with your goals and stats, then I can give you personalized fitness advice! 🎯"
+    ]
+  };
+
+  if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey') || msg.includes('start')) {
+    return responses.greeting[Math.floor(Math.random() * responses.greeting.length)];
+  }
+  if (msg.includes('workout') || msg.includes('exercise') || msg.includes('train')) {
+    return responses.workout[Math.floor(Math.random() * responses.workout.length)];
+  }
+  if (msg.includes('food') || msg.includes('eat') || msg.includes('diet') || msg.includes('nutrition') || msg.includes('protein') || msg.includes('calories')) {
+    return responses.nutrition[Math.floor(Math.random() * responses.nutrition.length)];
+  }
+  if (msg.includes('fat') || msg.includes('loss') || msg.includes('weight') || msg.includes('burn')) {
+    return responses.weight_loss[Math.floor(Math.random() * responses.weight_loss.length)];
+  }
+  if (msg.includes('muscle') || msg.includes('build') || msg.includes('grow') || msg.includes('strength')) {
+    return responses.muscle[Math.floor(Math.random() * responses.muscle.length)];
+  }
+  if (msg.includes('cardio') || msg.includes('run') || msg.includes('cycling')) {
+    return responses.cardio[Math.floor(Math.random() * responses.cardio.length)];
+  }
+  if (msg.includes('rest') || msg.includes('recovery') || msg.includes('sleep')) {
+    return responses.rest[Math.floor(Math.random() * responses.rest.length)];
+  }
+  if (msg.includes('beginner') || msg.includes('new') || msg.includes('start')) {
+    return responses.beginner[Math.floor(Math.random() * responses.beginner.length)];
+  }
+  if (msg.includes('motivate') || msg.includes('push') || msg.includes('keep going') || msg.includes('why')) {
+    return responses.motivation[Math.floor(Math.random() * responses.motivation.length)];
+  }
+  
+  return responses.default[Math.floor(Math.random() * responses.default.length)];
+};
     );
 
     if (chatHistory.messages.length > 50) {
