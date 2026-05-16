@@ -6,9 +6,9 @@ const getApiUrl = () => {
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return 'http://localhost:5000/api';
     }
-    return 'https://backend-e0eg9cqtd-prosuns-projects.vercel.app/api';
+    return 'https://backend-gray-gamma.vercel.app/api';
   }
-  return process.env.NEXT_PUBLIC_API_URL || 'https://backend-e0eg9cqtd-prosuns-projects.vercel.app/api';
+  return process.env.NEXT_PUBLIC_API_URL || 'https://backend-gray-gamma.vercel.app/api';
 };
 
 const api = axios.create({
