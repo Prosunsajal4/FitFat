@@ -41,7 +41,17 @@ function ProfileContent() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await authAPI.updateProfile(formData);
+      const payload = {
+        name: formData.name,
+        goal: formData.goal,
+        experience: formData.experience,
+        body: {
+          weight: parseFloat(formData.weight) || 0,
+          height: parseFloat(formData.height) || 0,
+          age: parseInt(formData.age) || 0,
+        }
+      };
+      const res = await authAPI.updateProfile(payload);
       updateUser(res.data);
       setEditing(false);
     } catch (error) {
