@@ -5,7 +5,7 @@ A full-stack fitness tracking application with AI-powered features built with ME
 ## 🔗 Live Demo
 
 - **Frontend**: https://fitfat-sooty.vercel.app
-- **Backend API**: https://fitfatbackend.vercel.app
+- **Backend API**: https://backend-gray-gamma.vercel.app
 
 ## Features
 
