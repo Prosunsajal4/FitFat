@@ -44,7 +44,9 @@ const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/fitfat';
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 10000
+  serverSelectionTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+  connectTimeoutMS: 30000
 })
 .then(() => {
   console.log("MongoDB Connected");
