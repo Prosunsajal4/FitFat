@@ -41,27 +41,33 @@ export default function Layout({ children }) {
             exit={{ x: -280 }}
             className="fixed lg:static inset-y-0 left-0 z-40 w-72 bg-dark-secondary border-r border-gray-800 flex flex-col"
           >
-            <div className="p-6 border-b border-gray-800">
+            <div className="flex items-center justify-between p-4 border-b border-gray-800">
               <Link href="/dashboard">
                 <h1 className="text-2xl font-heading font-bold gradient-text">FitFat</h1>
               </Link>
-              {user && (
-                <div className="mt-4 p-3 bg-dark-card rounded-lg">
-                  <p className="text-white font-medium">{user.name}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-neon-purple text-sm">Level {user.stats?.level || 1}</span>
-                    <span className="text-gray-400">|</span>
-                    <span className="text-neon-green text-sm">{getLevelName(user.stats?.level || 1)}</span>
-                  </div>
-                  <div className="mt-2">
-                    <div className="flex justify-between text-xs text-gray-400">
-                      <span>XP: {user.stats?.xp || 0}</span>
-                      <span>🔥 {user.stats?.streak || 0} day streak</span>
-                    </div>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="lg:hidden p-2 text-gray-400 hover:text-white rounded-lg hover:bg-dark-card"
+              >
+                <span className="text-2xl">✕</span>
+              </button>
+            </div>
+            {user && (
+              <div className="mt-4 p-3 bg-dark-card rounded-lg">
+                <p className="text-white font-medium">{user.name}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-neon-purple text-sm">Level {user.stats?.level || 1}</span>
+                  <span className="text-gray-400">|</span>
+                  <span className="text-neon-green text-sm">{getLevelName(user.stats?.level || 1)}</span>
+                </div>
+                <div className="mt-2">
+                  <div className="flex justify-between text-xs text-gray-400">
+                    <span>XP: {user.stats?.xp || 0}</span>
+                    <span>🔥 {user.stats?.streak || 0} day streak</span>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
             <nav className="flex-1 p-4 overflow-y-auto">
               <ul className="space-y-2">
