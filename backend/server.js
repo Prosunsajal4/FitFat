@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: ".env" });
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -11,30 +11,19 @@ const aiRoutes = require("./routes/aiRoutes");
 
 const app = express();
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "https://fitfat-sooty.vercel.app",
-    ];
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(null, true);
-    }
-  },
-  credentials: true,
-};
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 
-app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/health", (req, res) => {
   res.json({ 
     status: "ok", 
-    message: "FitFat API is running"
+    message: "FitFat API is running",
+    mongo: mongoose.connection.readyState === 1 ? "connected" : "disconnected"
   });
 });
 
@@ -45,8 +34,25 @@ app.use("/api/nutrition", nutritionRoutes);
 app.use("/api/ai", aiRoutes);
 
 app.use((err, req, res, next) => {
-  console.error(err.message);
   res.status(500).json({ message: "Server error" });
+});
+
+const PORT = process.env.PORT || 5000;
+
+const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/fitfat';
+
+mongoose.connect(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 10000
+})
+.then(() => {
+  console.log("MongoDB Connected");
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+})
+.catch((err) => {
+  console.log("MongoDB Error:", err.message);
+  app.listen(PORT, () => console.log(`Server running on port ${PORT} (DB not connected)`));
 });
 
 module.exports = app;
