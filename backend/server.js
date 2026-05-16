@@ -17,8 +17,10 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       'http://localhost:3000',
-      'https://studentos-liart.vercel.app',
-      'https://studentos-liart.vercel.app/'
+      'http://localhost:3001',
+      'https://fitfat-sooty.vercel.app',
+      'https://fitfat-sooty.vercel.app/',
+      'https://studentos-liart.vercel.app'
     ];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);

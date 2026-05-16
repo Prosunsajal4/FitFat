@@ -1,6 +1,40 @@
 # FitFat - AI-Powered Gym & Fitness Tracker
 
-A full-stack fitness tracking application with AI-powered features.
+A full-stack fitness tracking application with AI-powered features built with MERN stack.
+
+## 🔗 Live Demo
+
+- **Frontend**: https://fitfat-sooty.vercel.app
+- **Backend API**: https://fitfatbackend.vercel.app
+
+## Features
+
+- 🏋️ **Workout Tracker** - Log exercises, sets, reps, weight with real-time volume calculation
+- 🤖 **AI Workout Generator** - Personalized weekly workout plans using Gemini AI
+- 📈 **Progress Tracking** - Weight, body measurements, body fat percentage
+- 🥗 **Nutrition Tracker** - Meals, calories, protein, carbs, fats, water intake
+- 💬 **AI Fitness Coach** - Chat with AI for personalized fitness advice
+- ⚖️ **Muscle Balance Analyzer** - Track trained vs neglected muscle groups
+- 📊 **Analytics Dashboard** - Beautiful charts and statistics
+- 🔥 **Gamification** - XP system, levels, streaks, achievement badges
+- 🌙 **Dark Theme** - Modern glassmorphism UI with neon accents
+
+## Tech Stack
+
+- **Frontend**: Next.js 14, React, Tailwind CSS, Framer Motion, Chart.js
+- **Backend**: Node.js, Express.js, MongoDB, Mongoose
+- **Authentication**: JWT
+- **AI**: Google Gemini API
+
+## Developer
+
+**Prosun Mukherjee** - MERN Stack Developer
+- 📧 prosunsajal123@gmail.com
+- 📱 +8801911572117
+- 📍 Khulna, Bangladesh
+- 🔗 [GitHub](https://github.com/Prosunsajal4)
+- 🔗 [LinkedIn](https://linkedin.com/in/prosun-mukherjee)
+- 🔗 [Portfolio](https://prosun-mukherjee.vercel.app)
 
 ## Prerequisites
 
@@ -23,11 +57,11 @@ A full-stack fitness tracking application with AI-powered features.
 ### 2. Configure Environment
 
 Edit `backend/.env`:
-```
+```env
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/fitfat
+MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
-OPENAI_API_KEY=your_openai_api_key
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ### 3. Install Dependencies
@@ -44,36 +78,27 @@ npm install
 
 ## Running the Application
 
-### Start Backend (Terminal 1)
+### Development
+
+**Start Backend (Terminal 1)**
 ```bash
 cd backend
 npm start
 # Server runs on http://localhost:5000
 ```
 
-### Start Frontend (Terminal 2)
+**Start Frontend (Terminal 2)**
 ```bash
 cd frontend
 npm run dev
 # App runs on http://localhost:3000
 ```
 
-## Features
+### Production
 
-- 🏋️ **Workout Tracker** - Log exercises, sets, reps, weight
-- 🤖 **AI Workout Generator** - Personalized workout plans
-- 📈 **Progress Tracking** - Weight, measurements, body stats
-- 🥗 **Nutrition Tracker** - Calories, macros, water intake
-- 💬 **AI Fitness Coach** - Chat with AI for fitness advice
-- 📊 **Analytics Dashboard** - Charts and statistics
-- 🔥 **Gamification** - XP, levels, streaks, badges
-
-## Tech Stack
-
-- **Frontend**: Next.js 14, React, Tailwind CSS, Framer Motion, Chart.js
-- **Backend**: Node.js, Express.js, MongoDB, Mongoose
-- **Authentication**: JWT
-- **AI**: OpenAI GPT-3.5
+The application is deployed on Vercel:
+- Frontend: https://fitfat-sooty.vercel.app
+- Backend: https://fitfatbackend.vercel.app
 
 ## Project Structure
 
@@ -101,26 +126,34 @@ FitFat/
 - POST `/api/auth/register` - Register user
 - POST `/api/auth/login` - Login user
 - GET `/api/auth/me` - Get current user
+- PUT `/api/auth/profile` - Update profile
 
 ### Workouts
 - GET `/api/workouts` - Get all workouts
 - POST `/api/workouts` - Create workout
+- GET `/api/workouts/:id` - Get single workout
+- PUT `/api/workouts/:id` - Update workout
+- DELETE `/api/workouts/:id` - Delete workout
 - GET `/api/workouts/stats` - Get workout statistics
 
 ### Progress
 - GET `/api/progress` - Get progress entries
 - POST `/api/progress` - Add progress entry
+- GET `/api/progress/latest` - Get latest entry
 - GET `/api/progress/chart` - Get chart data
+- GET `/api/progress/predictions` - Get progress predictions
 
 ### Nutrition
 - GET `/api/nutrition/today` - Get today's nutrition
 - POST `/api/nutrition/meal` - Add meal
 - PUT `/api/nutrition/water` - Update water intake
+- GET `/api/nutrition/weekly` - Get weekly stats
 
 ### AI
 - POST `/api/ai/workout-plan` - Generate workout plan
 - POST `/api/ai/chat` - Chat with AI
+- GET `/api/ai/recommendations` - Get AI recommendations
 
 ## License
 
-MIT
+MIT © 2026 FitFat - Built by Prosun Mukherjee with ❤️

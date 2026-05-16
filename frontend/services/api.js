@@ -6,9 +6,9 @@ const getApiUrl = () => {
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return 'http://localhost:5000/api';
     }
-    return 'https://fitfat-backend.vercel.app/api';
+    return 'https://fitfatbackend.vercel.app/api';
   }
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+  return process.env.NEXT_PUBLIC_API_URL || 'https://fitfatbackend.vercel.app/api';
 };
 
 const api = axios.create({
