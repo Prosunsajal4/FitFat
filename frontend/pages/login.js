@@ -17,12 +17,14 @@ export default function Login() {
     setError('');
     setLoading(true);
 
+    console.log('Attempting login...');
     const result = await login(email, password);
+    console.log('Login result:', result);
 
     if (result.success) {
       router.push('/dashboard');
     } else {
-      setError(result.error);
+      setError(result.error || 'Login failed. Please try again.');
     }
     setLoading(false);
   };

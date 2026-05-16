@@ -35,7 +35,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setError(null);
+      console.log('Logging in to:', api.defaults.baseURL);
       const response = await api.post('/auth/login', { email, password });
+      console.log('Login response:', response.data);
+      
       const { token, ...userData } = response.data;
 
       localStorage.setItem('token', token);
@@ -45,7 +48,15 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       return { success: true };
     } catch (err) {
-      const message = err.response?.data?.message || 'Login failed';
+      console.error('Login error:', err);
+      let message = 'Login failed. Please check your credentials.';
+      if (err.code === 'ECONNABORTED') {
+        message = 'Server timeout. Please try again.';
+      } else if (err.response?.data?.message) {
+        message = err.response.data.message;
+      } else if (!err.response) {
+        message = 'Cannot connect to server. Make sure backend is running.';
+      }
       setError(message);
       return { success: false, error: message };
     }
@@ -54,6 +65,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password, goal, experience) => {
     try {
       setError(null);
+      console.log('Registering to:', api.defaults.baseURL);
       const response = await api.post('/auth/register', {
         name,
         email,
@@ -61,6 +73,8 @@ export const AuthProvider = ({ children }) => {
         goal,
         experience
       });
+      console.log('Register response:', response.data);
+      
       const { token, ...userData } = response.data;
 
       localStorage.setItem('token', token);
@@ -70,7 +84,15 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       return { success: true };
     } catch (err) {
-      const message = err.response?.data?.message || 'Registration failed';
+      console.error('Register error:', err);
+      let message = 'Registration failed. Please try again.';
+      if (err.code === 'ECONNABORTED') {
+        message = 'Server timeout. Please try again.';
+      } else if (err.response?.data?.message) {
+        message = err.response.data.message;
+      } else if (!err.response) {
+        message = 'Cannot connect to server. Make sure backend is running.';
+      }
       setError(message);
       return { success: false, error: message };
     }

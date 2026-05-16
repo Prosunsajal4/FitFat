@@ -1,11 +1,25 @@
 import axios from 'axios';
 
+const getApiUrl = () => {
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://localhost:5000/api';
+    }
+    return 'https://fitfat-backend.vercel.app/api';
+  }
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+};
+
 const api = axios.create({
-  baseURL: process.env.API_URL || 'http://localhost:5000/api',
+  baseURL: getApiUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 15000,
 });
+
+console.log('API Base URL:', getApiUrl());
 
 api.interceptors.request.use(
   (config) => {
