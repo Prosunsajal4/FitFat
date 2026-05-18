@@ -47,7 +47,7 @@ export default function Layout({ children }) {
                 <h1 className="text-2xl font-heading font-bold gradient-text">FitFat</h1>
               </Link>
               <button
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={() => { setMobileMenuOpen(false); setSidebarOpen(false); }}
                 className="lg:hidden p-2 text-gray-400 hover:text-white rounded-lg hover:bg-dark-card"
               >
                 <span className="text-2xl">✕</span>
