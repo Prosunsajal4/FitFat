@@ -18,15 +18,16 @@ function DietContent() {
   const [selectedWorkout, setSelectedWorkout] = useState('Push');
   const [dietPlan, setDietPlan] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [lang, setLang] = useState('bn');
 
   useEffect(() => {
     fetchDietPlan(selectedWorkout);
-  }, [selectedWorkout]);
+  }, [selectedWorkout, lang]);
 
   const fetchDietPlan = async (workoutType) => {
     setLoading(true);
     try {
-      const res = await dietAPI.getDietPlan(workoutType);
+      const res = await dietAPI.getDietPlan(workoutType, lang);
       setDietPlan(res.data);
     } catch (error) {
       console.error('Error fetching diet plan:', error);
@@ -45,9 +46,25 @@ function DietContent() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-heading font-bold">বাংলাদেশি ডায়েট প্ল্যান 🇧🇩</h1>
-        <p className="text-gray-400">আপনার ওয়ার্কআউট অনুযায়ী খাবার পরিকল্পনা</p>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-heading font-bold">{lang === 'bn' ? 'বাংলাদেশি ডায়েট প্ল্যান 🇧🇩' : 'Bangladeshi Diet Plan 🇧🇩'}</h1>
+          <p className="text-gray-400">{lang === 'bn' ? 'আপনার ওয়ার্কআউট অনুযায়ী খাবার পরিকল্পনা' : 'Meal plan based on your workout'}</p>
+        </div>
+        <div className="flex items-center gap-2 bg-dark-card p-1 rounded-lg">
+          <button
+            onClick={() => setLang('bn')}
+            className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${lang === 'bn' ? 'bg-neon-green text-black' : 'text-gray-400 hover:text-white'}`}
+          >
+            বাংলা
+          </button>
+          <button
+            onClick={() => setLang('en')}
+            className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${lang === 'en' ? 'bg-neon-green text-black' : 'text-gray-400 hover:text-white'}`}
+          >
+            English
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -78,7 +95,7 @@ function DietContent() {
             <h3 className="text-xl font-bold mb-2">{dietPlan.plan.name}</h3>
             <div className="flex flex-wrap gap-4 text-sm">
               <span className="px-3 py-1 bg-neon-green/20 rounded-full text-neon-green">
-                🎯 Goal: {dietPlan.goal}
+                🎯 Goal: {lang === 'bn' ? (dietPlan.goal === 'bulking' ? 'বাল্কিং' : dietPlan.goal === 'cutting' ? 'কাটিং' : 'মেইনটেনেন্স') : dietPlan.goal}
               </span>
               <span className="px-3 py-1 bg-neon-purple/20 rounded-full text-neon-purple">
                 ⚖️ Weight: {dietPlan.weight}kg
@@ -135,7 +152,7 @@ function DietContent() {
               animate={{ opacity: 1, y: 0 }}
               className="glass-card p-6 bg-gradient-to-r from-neon-green/10 to-neon-purple/10"
             >
-              <h3 className="text-xl font-bold mb-4">📊 Daily Totals</h3>
+              <h3 className="text-xl font-bold mb-4">{lang === 'bn' ? '📊 দৈনিক মোট' : '📊 Daily Totals'}</h3>
               <div className="grid grid-cols-4 gap-4 text-center">
                 <div>
                   <p className="text-3xl font-bold text-neon-green">{dietPlan.plan.totals.calories}</p>
@@ -163,7 +180,7 @@ function DietContent() {
               animate={{ opacity: 1, y: 0 }}
               className="glass-card p-6 border-l-4 border-neon-purple"
             >
-              <h3 className="text-xl font-bold mb-4">💡 টিপস</h3>
+              <h3 className="text-xl font-bold mb-4">{lang === 'bn' ? '💡 টিপস' : '💡 Tips'}</h3>
               <ul className="space-y-2">
                 {dietPlan.tips.map((tip, i) => (
                   <li key={i} className="flex items-start gap-2">

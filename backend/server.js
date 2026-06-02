@@ -20,25 +20,52 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 let mongoConnected = false;
+let mongoConnecting = false;
 
 const connectDB = async () => {
+  if (mongoConnected) return true;
+  if (mongoConnecting) return false;
+
   try {
     const mongoUri = process.env.MONGODB_URI;
     if (!mongoUri) {
       console.log("No MONGODB_URI found");
-      return;
+      return false;
     }
+    mongoConnecting = true;
     await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 30000,
+      maxPoolSize: 10,
     });
     mongoConnected = true;
+    mongoConnecting = false;
     console.log("MongoDB Connected");
+    return true;
   } catch (err) {
     console.log("MongoDB Connection Error:", err.message);
     mongoConnected = false;
+    mongoConnecting = false;
+    return false;
   }
 };
+
+const ensureDB = async (req, res, next) => {
+  if (mongoConnected) return next();
+  const connected = await connectDB();
+  if (connected) return next();
+  res.status(503).json({ message: "Database not available. Please try again." });
+};
+
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected, will reconnect on next request');
+  mongoConnected = false;
+});
+
+mongoose.connection.on('error', (err) => {
+  console.log('MongoDB error:', err.message);
+  mongoConnected = false;
+});
 
 connectDB();
 
@@ -50,12 +77,12 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/workouts", workoutRoutes);
-app.use("/api/progress", progressRoutes);
-app.use("/api/nutrition", nutritionRoutes);
-app.use("/api/ai", aiRoutes);
-app.use("/api/diet", dietRoutes);
+app.use("/api/auth", ensureDB, authRoutes);
+app.use("/api/workouts", ensureDB, workoutRoutes);
+app.use("/api/progress", ensureDB, progressRoutes);
+app.use("/api/nutrition", ensureDB, nutritionRoutes);
+app.use("/api/ai", ensureDB, aiRoutes);
+app.use("/api/diet", ensureDB, dietRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.message);

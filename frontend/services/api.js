@@ -89,7 +89,7 @@ export const aiAPI = {
 };
 
 export const dietAPI = {
-  getDietPlan: (workoutType) => api.get('/diet', { params: { workoutType } }),
+  getDietPlan: (workoutType, lang = 'bn') => api.get('/diet', { params: { workoutType, lang } }),
 };
 
 export default api;

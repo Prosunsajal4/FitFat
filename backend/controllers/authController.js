@@ -40,7 +40,14 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    let user;
+    try {
+      user = await User.findOne({ email });
+    } catch (dbError) {
+      console.log('DB error on login, retrying...', dbError.message);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      user = await User.findOne({ email });
+    }
 
     if (user && (await user.matchPassword(password))) {
       res.json({
