@@ -16,12 +16,112 @@ import ProtectedRoute from '../components/ProtectedRoute';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+function Calendar({ progressData, selectedDate, onSelectDate }) {
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+  const progressDates = {};
+  progressData.forEach((entry) => {
+    const d = new Date(entry.date);
+    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    progressDates[key] = entry;
+  });
+
+  const days = [];
+  for (let i = 0; i < firstDayOfMonth; i++) {
+    days.push(null);
+  }
+  for (let i = 1; i <= daysInMonth; i++) {
+    days.push(i);
+  }
+
+  const prevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const nextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
+  const today = new Date();
+
+  return (
+    <div className="glass-card p-6">
+      <div className="flex items-center justify-between mb-4">
+        <button onClick={prevMonth} className="p-2 hover:bg-dark-card rounded-lg text-gray-400 hover:text-white">
+          ◀
+        </button>
+        <h3 className="font-heading font-bold text-lg">{monthNames[currentMonth]} {currentYear}</h3>
+        <button onClick={nextMonth} className="p-2 hover:bg-dark-card rounded-lg text-gray-400 hover:text-white">
+          ▶
+        </button>
+      </div>
+
+      <div className="grid grid-cols-7 gap-1 mb-2">
+        {dayNames.map((day) => (
+          <div key={day} className="text-center text-xs text-gray-500 py-1">{day}</div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-7 gap-1">
+        {days.map((day, idx) => {
+          if (day === null) return <div key={`empty-${idx}`} />;
+
+          const key = `${currentYear}-${currentMonth}-${day}`;
+          const hasProgress = progressDates[key];
+          const isToday = today.getDate() === day && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+          const isSelected = selectedDate && selectedDate.getDate() === day && selectedDate.getMonth() === currentMonth && selectedDate.getFullYear() === currentYear;
+
+          return (
+            <button
+              key={day}
+              onClick={() => onSelectDate(new Date(currentYear, currentMonth, day))}
+              className={`relative p-2 rounded-lg text-sm transition-all ${
+                isSelected
+                  ? 'bg-neon-green text-black font-bold'
+                  : isToday
+                  ? 'bg-neon-purple/20 text-neon-purple border border-neon-purple/50'
+                  : hasProgress
+                  ? 'bg-neon-green/10 text-neon-green hover:bg-neon-green/20'
+                  : 'text-gray-400 hover:bg-dark-card hover:text-white'
+              }`}
+            >
+              {day}
+              {hasProgress && !isSelected && (
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-neon-green rounded-full"></span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function ProgressContent() {
   const [progressData, setProgressData] = useState([]);
   const [chartData, setChartData] = useState(null);
   const [predictions, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedEntry, setSelectedEntry] = useState(null);
   const [formData, setFormData] = useState({
     weight: '',
     chest: '',
@@ -37,7 +137,7 @@ function ProgressContent() {
   const fetchProgress = async () => {
     try {
       const [progressRes, chartRes, predRes] = await Promise.all([
-        progressAPI.getProgress({ limit: 30 }),
+        progressAPI.getProgress({ limit: 365 }),
         progressAPI.getChart({ period: 60 }),
         progressAPI.getPredictions(),
       ]);
@@ -49,6 +149,15 @@ function ProgressContent() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    const entry = progressData.find((p) => {
+      const d = new Date(p.date);
+      return d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear();
+    });
+    setSelectedEntry(entry || null);
   };
 
   const handleSubmit = async (e) => {
@@ -157,6 +266,75 @@ function ProgressContent() {
           ))}
         </div>
       )}
+
+      <div className="grid lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1">
+          <Calendar progressData={progressData} selectedDate={selectedDate} onSelectDate={handleDateSelect} />
+        </div>
+
+        <div className="lg:col-span-2 space-y-6">
+          {selectedEntry && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="glass-card p-6 border-l-4 border-neon-green"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-heading font-bold text-lg">📅 {new Date(selectedEntry.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h3>
+                <span className="text-xs text-gray-400">Logged Entry</span>
+              </div>
+              <div className="grid grid-cols-5 gap-4 text-center">
+                {selectedEntry.weight && (
+                  <div className="bg-dark-bg p-3 rounded-lg">
+                    <p className="text-2xl font-bold text-neon-green">{selectedEntry.weight}</p>
+                    <p className="text-xs text-gray-400">Weight (kg)</p>
+                  </div>
+                )}
+                {selectedEntry.chest && (
+                  <div className="bg-dark-bg p-3 rounded-lg">
+                    <p className="text-2xl font-bold text-neon-purple">{selectedEntry.chest}</p>
+                    <p className="text-xs text-gray-400">Chest (cm)</p>
+                  </div>
+                )}
+                {selectedEntry.arms && (
+                  <div className="bg-dark-bg p-3 rounded-lg">
+                    <p className="text-2xl font-bold text-cyan-400">{selectedEntry.arms}</p>
+                    <p className="text-xs text-gray-400">Arms (cm)</p>
+                  </div>
+                )}
+                {selectedEntry.waist && (
+                  <div className="bg-dark-bg p-3 rounded-lg">
+                    <p className="text-2xl font-bold text-yellow-400">{selectedEntry.waist}</p>
+                    <p className="text-xs text-gray-400">Waist (cm)</p>
+                  </div>
+                )}
+                {selectedEntry.bodyFat && (
+                  <div className="bg-dark-bg p-3 rounded-lg">
+                    <p className="text-2xl font-bold text-red-400">{selectedEntry.bodyFat}%</p>
+                    <p className="text-xs text-gray-400">Body Fat</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {selectedDate && !selectedEntry && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="glass-card p-6 border-l-4 border-gray-600"
+            >
+              <p className="text-gray-400">No entry logged for {selectedDate.toLocaleDateString()}</p>
+              <button
+                onClick={() => setShowModal(true)}
+                className="mt-3 px-4 py-2 bg-neon-green/20 text-neon-green rounded-lg text-sm hover:bg-neon-green/30"
+              >
+                + Add Entry
+              </button>
+            </motion.div>
+          )}
+        </div>
+      </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
         <motion.div
