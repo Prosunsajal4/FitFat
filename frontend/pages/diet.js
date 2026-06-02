@@ -5,13 +5,21 @@ import { dietAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 const workoutTypes = [
-  { id: 'Push', name: 'Push Day', icon: '💪', desc: 'Chest, Shoulders, Triceps' },
-  { id: 'Pull', name: 'Pull Day', icon: '🏋️', desc: 'Back, Biceps' },
-  { id: 'Legs', name: 'Leg Day', icon: '🦵', desc: 'Quads, Hamstrings, Calves' },
-  { id: 'Full', name: 'Full Body', icon: '🔥', desc: 'Full Body Workout' },
-  { id: 'Cardio', name: 'Cardio Day', icon: '🏃', desc: 'Running, Cycling, HIIT' },
-  { id: 'Rest', name: 'Rest Day', icon: '😴', desc: 'Recovery & Rest' },
+  { id: 'Push', nameBn: 'পুশ ডে', nameEn: 'Push Day', icon: '💪', descBn: 'বুক, কাঁধ, ট্রাইসেপস', descEn: 'Chest, Shoulders, Triceps' },
+  { id: 'Pull', nameBn: 'পুল ডে', nameEn: 'Pull Day', icon: '🏋️', descBn: 'পিঠ, বাইসেপস', descEn: 'Back, Biceps' },
+  { id: 'Legs', nameBn: 'লেগ ডে', nameEn: 'Leg Day', icon: '🦵', descBn: 'পায়ের পেশী', descEn: 'Quads, Hamstrings, Calves' },
+  { id: 'Full', nameBn: 'ফুল বডি', nameEn: 'Full Body', icon: '🔥', descBn: 'পুরো শরীর', descEn: 'Full Body Workout' },
+  { id: 'Cardio', nameBn: 'কার্ডিও', nameEn: 'Cardio Day', icon: '🏃', descBn: 'দৌড়, সাইকেল, HIIT', descEn: 'Running, Cycling, HIIT' },
+  { id: 'Rest', nameBn: 'রেস্ট ডে', nameEn: 'Rest Day', icon: '😴', descBn: 'বিশ্রাম ও রিকভারি', descEn: 'Recovery & Rest' },
 ];
+
+const mealHeaders = {
+  breakfast: { bn: 'সকালের নাস্তা', en: 'Breakfast' },
+  snack1: { bn: 'প্রথম নাস্তা', en: 'Snack 1' },
+  lunch: { bn: 'দুপুরের খাবার', en: 'Lunch' },
+  snack2: { bn: 'দ্বিতীয় নাস্তা', en: 'Snack 2' },
+  dinner: { bn: 'রাতের খাবার', en: 'Dinner' },
+};
 
 function DietContent() {
   const { user } = useAuth();
@@ -79,8 +87,8 @@ function DietContent() {
             }`}
           >
             <div className="text-2xl mb-1">{type.icon}</div>
-            <p className="text-sm font-bold">{type.name}</p>
-            <p className="text-xs text-gray-400">{type.desc}</p>
+            <p className="text-sm font-bold">{lang === 'bn' ? type.nameBn : type.nameEn}</p>
+            <p className="text-xs text-gray-400">{lang === 'bn' ? type.descBn : type.descEn}</p>
           </button>
         ))}
       </div>
@@ -119,7 +127,7 @@ function DietContent() {
                       {key === 'breakfast' ? '🌅' : key === 'lunch' ? '🍛' : key === 'dinner' ? '🌙' : '🍎'}
                     </span>
                     <div>
-                      <h4 className="font-bold capitalize">{key}</h4>
+                      <h4 className="font-bold">{mealHeaders[key] ? (lang === 'bn' ? mealHeaders[key].bn : mealHeaders[key].en) : key}</h4>
                       <p className="text-sm text-neon-green">{meal.name}</p>
                     </div>
                   </div>
@@ -127,19 +135,19 @@ function DietContent() {
                   <div className="grid grid-cols-4 gap-2 text-center text-xs">
                     <div className="bg-dark-bg p-2 rounded">
                       <p className="text-neon-green font-bold">{meal.calories}</p>
-                      <p className="text-gray-500">kcal</p>
+                      <p className="text-gray-500">{lang === 'bn' ? 'ক্যালোরি' : 'kcal'}</p>
                     </div>
                     <div className="bg-dark-bg p-2 rounded">
                       <p className="text-neon-purple font-bold">{meal.protein}g</p>
-                      <p className="text-gray-500">protein</p>
+                      <p className="text-gray-500">{lang === 'bn' ? 'প্রোটিন' : 'protein'}</p>
                     </div>
                     <div className="bg-dark-bg p-2 rounded">
                       <p className="text-cyan-400 font-bold">{meal.carbs}g</p>
-                      <p className="text-gray-500">carbs</p>
+                      <p className="text-gray-500">{lang === 'bn' ? 'কার্বস' : 'carbs'}</p>
                     </div>
                     <div className="bg-dark-bg p-2 rounded">
                       <p className="text-yellow-400 font-bold">{meal.fats}g</p>
-                      <p className="text-gray-500">fats</p>
+                      <p className="text-gray-500">{lang === 'bn' ? 'ফ্যাট' : 'fats'}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -156,19 +164,19 @@ function DietContent() {
               <div className="grid grid-cols-4 gap-4 text-center">
                 <div>
                   <p className="text-3xl font-bold text-neon-green">{dietPlan.plan.totals.calories}</p>
-                  <p className="text-gray-400">Calories</p>
+                  <p className="text-gray-400">{lang === 'bn' ? 'ক্যালোরি' : 'Calories'}</p>
                 </div>
                 <div>
                   <p className="text-3xl font-bold text-neon-purple">{dietPlan.plan.totals.protein}g</p>
-                  <p className="text-gray-400">Protein</p>
+                  <p className="text-gray-400">{lang === 'bn' ? 'প্রোটিন' : 'Protein'}</p>
                 </div>
                 <div>
                   <p className="text-3xl font-bold text-cyan-400">{dietPlan.plan.totals.carbs}g</p>
-                  <p className="text-gray-400">Carbs</p>
+                  <p className="text-gray-400">{lang === 'bn' ? 'কার্বস' : 'Carbs'}</p>
                 </div>
                 <div>
                   <p className="text-3xl font-bold text-yellow-400">{dietPlan.plan.totals.fats}g</p>
-                  <p className="text-gray-400">Fats</p>
+                  <p className="text-gray-400">{lang === 'bn' ? 'ফ্যাট' : 'Fats'}</p>
                 </div>
               </div>
             </motion.div>
