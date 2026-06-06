@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { AuthProvider } from '../context/AuthContext';
 import ErrorBoundary from '../components/ErrorBoundary';
+import { ToastProvider } from '../components/Toast';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
@@ -21,9 +22,11 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>" />
       </Head>
       <ErrorBoundary>
-        <AuthProvider>
-          <Component {...pageProps} />
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <Component {...pageProps} />
+          </AuthProvider>
+        </ToastProvider>
       </ErrorBoundary>
     </>
   );
