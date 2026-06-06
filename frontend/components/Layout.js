@@ -46,12 +46,13 @@ export default function Layout({ children }) {
               <Link href="/dashboard">
                 <h1 className="text-2xl font-heading font-bold gradient-text">FitFat</h1>
               </Link>
-              <button
-                onClick={() => { setMobileMenuOpen(false); setSidebarOpen(false); }}
-                className="lg:hidden p-2 text-gray-400 hover:text-white rounded-lg hover:bg-dark-card"
-              >
-                <span className="text-2xl">✕</span>
-              </button>
+          <button
+            onClick={() => { setMobileMenuOpen(false); setSidebarOpen(false); }}
+            className="lg:hidden p-2 text-gray-400 hover:text-white rounded-lg hover:bg-dark-card"
+            aria-label="Close menu"
+          >
+            <span className="text-2xl">✕</span>
+          </button>
             </div>
             {user && (
               <div className="mt-4 p-3 bg-dark-card rounded-lg">
@@ -95,6 +96,7 @@ export default function Layout({ children }) {
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 transition-all"
+                aria-label="Logout"
               >
                 <span className="text-xl">🚪</span>
                 <span className="font-medium">Logout</span>
@@ -116,6 +118,7 @@ export default function Layout({ children }) {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden p-2 text-gray-400 hover:text-white"
+            aria-label="Toggle menu"
           >
             <span className="text-2xl">☰</span>
           </button>
@@ -123,6 +126,7 @@ export default function Layout({ children }) {
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="hidden lg:block p-2 text-gray-400 hover:text-white"
+            aria-label="Toggle sidebar"
           >
             <span className="text-xl">{sidebarOpen ? '◀' : '▶'}</span>
           </button>
