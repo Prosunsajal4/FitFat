@@ -16,6 +16,7 @@ function WorkoutsContent() {
   const [showExerciseDB, setShowExerciseDB] = useState(false);
   const [exerciseIndex, setExerciseIndex] = useState(0);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [editingWorkout, setEditingWorkout] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -148,6 +149,18 @@ function WorkoutsContent() {
       </div>
 
       {workouts.length > 0 && (
+        <div className="mb-4">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="🔍 Search workouts by name..."
+            className="w-full px-4 py-2 rounded-lg bg-dark-card border border-gray-700 focus:ring-2 focus:ring-neon-green"
+          />
+        </div>
+      )}
+
+      {workouts.length > 0 && (
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
             <WorkoutCalendar workouts={workouts} onSelectWorkout={setSelectedWorkout} selectedWorkout={selectedWorkout} />
@@ -215,7 +228,7 @@ function WorkoutsContent() {
         </div>
       ) : (
         <div className="grid gap-4">
-          {workouts.map((workout, index) => (
+          {workouts.filter(w => w.name.toLowerCase().includes(searchQuery.toLowerCase())).map((workout, index) => (
             <motion.div
               key={workout._id}
               initial={{ opacity: 0, y: 20 }}
