@@ -147,3 +147,22 @@ button:hover {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.hide-mobile { display: block; }
+.hide-desktop { display: none; }
+
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .hide-desktop { display: block !important; }
+  .glass-card { border-radius: 12px; }
+  .text-responsive-lg { font-size: 1.25rem; }
+}
+
+@media (min-width: 769px) {
+  .text-responsive-xl { font-size: 2rem; }
+}
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
