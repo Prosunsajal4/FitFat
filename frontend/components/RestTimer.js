@@ -25,6 +25,20 @@ export default function RestTimer({ onComplete, onClose }) {
   }, []);
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (isRunning) pauseTimer();
+        else startTimer();
+      }
+      if (e.code === 'Escape') onClose();
+      if (e.code === 'KeyR') resetTimer();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isRunning, timeLeft]);
+
+  useEffect(() => {
     if (isRunning && timeLeft > 0) {
       intervalRef.current = setInterval(() => {
         setTimeLeft((prev) => {
@@ -190,6 +204,7 @@ export default function RestTimer({ onComplete, onClose }) {
         >
           Close
         </button>
+        <p className="text-xs text-gray-600 mt-2">Space: start/pause | R: reset | Esc: close</p>
       </motion.div>
     </motion.div>
   );
