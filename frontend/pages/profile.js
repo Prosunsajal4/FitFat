@@ -63,9 +63,79 @@ function ProfileContent() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-heading font-bold">Profile</h1>
-        <p className="text-gray-400">Manage your account and view achievements</p>
+      <h1 className="text-3xl font-heading font-bold">Profile</h1>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card p-6"
+        >
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-neon-green to-neon-purple flex items-center justify-center text-2xl font-bold text-black">
+              {user?.name?.charAt(0) || 'U'}
+            </div>
+            <div>
+              <h2 className="text-xl font-bold">{user?.name}</h2>
+              <p className="text-gray-400">{user?.email}</p>
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <div className="flex justify-between text-sm mb-2">
+              <span className="text-gray-400">Level {user?.stats?.level || 1} - {currentLevel.name}</span>
+              <span className="text-neon-green">{user?.stats?.xp || 0} / {currentLevel.maxXP} XP</span>
+            </div>
+            <div className="w-full bg-dark-bg rounded-full h-3">
+              <div
+                className="h-3 rounded-full transition-all duration-500"
+                style={{ width: `${progressPercentage}%`, background: `linear-gradient(90deg, ${currentLevel.color}, ${nextLevel?.color || currentLevel.color})` }}
+              ></div>
+            </div>
+            {nextLevel && (
+              <p className="text-xs text-gray-500 mt-1">{nextLevel.minXP - (user?.stats?.xp || 0)} XP to {nextLevel.name}</p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="bg-dark-bg p-3 rounded-lg">
+              <p className="text-2xl font-bold text-neon-green">{user?.stats?.streak || 0}</p>
+              <p className="text-xs text-gray-400">Streak 🔥</p>
+            </div>
+            <div className="bg-dark-bg p-3 rounded-lg">
+              <p className="text-2xl font-bold text-neon-purple">{user?.stats?.totalWorkouts || 0}</p>
+              <p className="text-xs text-gray-400">Workouts</p>
+            </div>
+            <div className="bg-dark-bg p-3 rounded-lg">
+              <p className="text-2xl font-bold text-yellow-400">{user?.stats?.badges?.length || 0}</p>
+              <p className="text-xs text-gray-400">Badges</p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="glass-card p-6"
+        >
+          <h3 className="font-heading font-bold text-lg mb-4">Achievements</h3>
+          <div className="space-y-3">
+            {Object.entries(badges).map(([key, badge]) => {
+              const earned = user?.stats?.badges?.includes(key);
+              return (
+                <div key={key} className={`flex items-center gap-3 p-3 rounded-lg ${earned ? 'bg-neon-green/10 border border-neon-green/30' : 'bg-dark-bg opacity-50'}`}>
+                  <span className="text-2xl">{badge.icon}</span>
+                  <div>
+                    <p className={`font-bold text-sm ${earned ? 'text-neon-green' : 'text-gray-500'}`}>{badge.name}</p>
+                    <p className="text-xs text-gray-500">{badge.description}</p>
+                  </div>
+                  {earned && <span className="ml-auto text-neon-green">✓</span>}
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
