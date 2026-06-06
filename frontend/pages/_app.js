@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { AuthProvider } from '../context/AuthContext';
+import ErrorBoundary from '../components/ErrorBoundary';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
@@ -19,9 +20,11 @@ function MyApp({ Component, pageProps }) {
         <meta name="twitter:title" content="FitFat - AI-Powered Gym & Fitness Tracker" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>" />
       </Head>
-      <AuthProvider>
-        <Component {...pageProps} />
-      </AuthProvider>
+      <ErrorBoundary>
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
+      </ErrorBoundary>
     </>
   );
 }
