@@ -30,6 +30,11 @@ const progressSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  photos: {
+    front: { type: String, default: '' },
+    side: { type: String, default: '' },
+    back: { type: String, default: '' }
+  },
   date: {
     type: Date,
     default: Date.now

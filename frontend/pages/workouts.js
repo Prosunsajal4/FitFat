@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { workoutAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import RestTimer from '../components/RestTimer';
+import WorkoutCalendar from '../components/WorkoutCalendar';
+import ExerciseDatabase from '../components/ExerciseDatabase';
 
 const muscleGroups = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'other'];
 
@@ -9,6 +12,10 @@ function WorkoutsContent() {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showTimer, setShowTimer] = useState(false);
+  const [showExerciseDB, setShowExerciseDB] = useState(false);
+  const [exerciseIndex, setExerciseIndex] = useState(0);
+  const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [editingWorkout, setEditingWorkout] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -117,20 +124,82 @@ function WorkoutsContent() {
           <h1 className="text-3xl font-heading font-bold">Workout Tracker</h1>
           <p className="text-gray-400">Log and track your gym sessions</p>
         </div>
-        <button
-          onClick={() => {
-            setEditingWorkout(null);
-            setFormData({
-              name: '',
-              exercises: [{ name: '', sets: 3, reps: 10, weight: 0, muscleGroup: 'chest' }],
-            });
-            setShowModal(true);
-          }}
-          className="px-6 py-3 bg-neon-green text-black font-bold rounded-lg hover:bg-neon-green/90"
-        >
-          + New Workout
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowTimer(true)}
+            className="px-4 py-3 bg-neon-purple text-white font-bold rounded-lg hover:bg-neon-purple/90"
+          >
+            ⏱️ Timer
+          </button>
+          <button
+            onClick={() => {
+              setEditingWorkout(null);
+              setFormData({
+                name: '',
+                exercises: [{ name: '', sets: 3, reps: 10, weight: 0, muscleGroup: 'chest' }],
+              });
+              setShowModal(true);
+            }}
+            className="px-6 py-3 bg-neon-green text-black font-bold rounded-lg hover:bg-neon-green/90"
+          >
+            + New Workout
+          </button>
+        </div>
       </div>
+
+      {workouts.length > 0 && (
+        <div className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-1">
+            <WorkoutCalendar workouts={workouts} onSelectWorkout={setSelectedWorkout} selectedWorkout={selectedWorkout} />
+          </div>
+          <div className="lg:col-span-2">
+            {selectedWorkout && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="glass-card p-6 mb-4 border-l-4 border-neon-green"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-heading font-bold text-lg">📅 {selectedWorkout.name}</h3>
+                  <span className="text-xs text-gray-400">{new Date(selectedWorkout.createdAt || selectedWorkout.date).toLocaleDateString()}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-4 text-center text-sm">
+                  <div className="bg-dark-bg p-2 rounded">
+                    <p className="text-neon-green font-bold">{selectedWorkout.exercises?.length || 0}</p>
+                    <p className="text-gray-500">Exercises</p>
+                  </div>
+                  <div className="bg-dark-bg p-2 rounded">
+                    <p className="text-neon-purple font-bold">{selectedWorkout.totalVolume?.toLocaleString() || 0}</p>
+                    <p className="text-gray-500">Volume</p>
+                  </div>
+                  <div className="bg-dark-bg p-2 rounded">
+                    <p className="text-yellow-400 font-bold">{selectedWorkout.caloriesBurned || 0}</p>
+                    <p className="text-gray-500">Calories</p>
+                  </div>
+                </div>
+                <div className="mt-3 flex gap-2">
+                  <button
+                    onClick={() => {
+                      setEditingWorkout(selectedWorkout);
+                      setFormData({ name: selectedWorkout.name, exercises: selectedWorkout.exercises });
+                      setShowModal(true);
+                    }}
+                    className="px-3 py-1.5 bg-neon-green/20 text-neon-green rounded-lg text-sm hover:bg-neon-green/30"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => setSelectedWorkout(null)}
+                    className="px-3 py-1.5 bg-gray-700 text-white rounded-lg text-sm hover:bg-gray-600"
+                  >
+                    Close
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </div>
+        </div>
+      )}
 
       {workouts.length === 0 ? (
         <div className="glass-card p-12 text-center">
@@ -280,14 +349,24 @@ function WorkoutsContent() {
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <input
-                          type="text"
-                          value={ex.name}
-                          onChange={(e) => updateExercise(index, 'name', e.target.value)}
-                          className="px-3 py-2 rounded"
-                          placeholder="Exercise name"
-                          required
-                        />
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={ex.name}
+                            onChange={(e) => updateExercise(index, 'name', e.target.value)}
+                            className="flex-1 px-3 py-2 rounded"
+                            placeholder="Exercise name"
+                            required
+                          />
+                          <button
+                            type="button"
+                            onClick={() => { setExerciseIndex(index); setShowExerciseDB(true); }}
+                            className="px-3 py-2 bg-neon-purple text-white rounded-lg text-sm hover:bg-neon-purple/80"
+                            title="Search exercise database"
+                          >
+                            🔍
+                          </button>
+                        </div>
 
                         <select
                           value={ex.muscleGroup}
@@ -350,6 +429,27 @@ function WorkoutsContent() {
               </form>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showTimer && <RestTimer onClose={() => setShowTimer(false)} />}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showExerciseDB && (
+          <ExerciseDatabase
+            onClose={() => setShowExerciseDB(false)}
+            onSelectExercise={(ex) => {
+              const newExercises = [...formData.exercises];
+              newExercises[exerciseIndex] = {
+                ...newExercises[exerciseIndex],
+                name: ex.name,
+                muscleGroup: ex.muscle,
+              };
+              setFormData({ ...formData, exercises: newExercises });
+            }}
+          />
         )}
       </AnimatePresence>
     </div>

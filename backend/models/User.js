@@ -50,7 +50,9 @@ const userSchema = new mongoose.Schema({
     dailyCalorieTarget: { type: Number, default: 2000 },
     proteinTarget: { type: Number, default: 150 },
     waterGoal: { type: Number, default: 8 }
-  }
+  },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date
 }, {
   timestamps: true
 });

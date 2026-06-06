@@ -79,6 +79,11 @@ export default function Login() {
                 placeholder="Enter your password"
                 required
               />
+              <div className="text-right mt-2">
+                <Link href="/forgot-password" className="text-xs text-neon-green hover:underline">
+                  Forgot Password?
+                </Link>
+              </div>
             </div>
 
             <button

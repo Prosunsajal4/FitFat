@@ -129,6 +129,8 @@ function ProgressContent() {
     waist: '',
     bodyFat: '',
   });
+  const [photos, setPhotos] = useState({ front: '', side: '', back: '' });
+  const [photoPreview, setPhotoPreview] = useState({ front: '', side: '', back: '' });
 
   useEffect(() => {
     fetchProgress();
@@ -163,12 +165,30 @@ function ProgressContent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await progressAPI.addProgress(formData);
+      await progressAPI.addProgress({ ...formData, photos });
       setShowModal(false);
       setFormData({ weight: '', chest: '', arms: '', waist: '', bodyFat: '' });
+      setPhotos({ front: '', side: '', back: '' });
+      setPhotoPreview({ front: '', side: '', back: '' });
       fetchProgress();
     } catch (error) {
       console.error('Error adding progress:', error);
+    }
+  };
+
+  const handlePhotoUpload = (e, type) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5000000) {
+        alert('Image must be less than 5MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotos((prev) => ({ ...prev, [type]: reader.result }));
+        setPhotoPreview((prev) => ({ ...prev, [type]: reader.result }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -315,6 +335,21 @@ function ProgressContent() {
                   </div>
                 )}
               </div>
+              {selectedEntry.photos && (selectedEntry.photos.front || selectedEntry.photos.side || selectedEntry.photos.back) && (
+                <div className="mt-4 pt-4 border-t border-gray-700">
+                  <p className="text-sm text-gray-400 mb-3">📸 Progress Photos</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    {['front', 'side', 'back'].map((type) => (
+                      selectedEntry.photos[type] && (
+                        <div key={type} className="text-center">
+                          <img src={selectedEntry.photos[type]} alt={type} className="w-full h-32 object-cover rounded-lg" />
+                          <p className="text-xs text-gray-500 mt-1 capitalize">{type}</p>
+                        </div>
+                      )
+                    ))}
+                  </div>
+                </div>
+              )}
             </motion.div>
           )}
 
@@ -475,6 +510,34 @@ function ProgressContent() {
                     className="w-full px-4 py-2 rounded-lg"
                     placeholder="80"
                   />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-2">📸 Progress Photos (optional, max 5MB each)</label>
+                <div className="grid grid-cols-3 gap-3">
+                  {['front', 'side', 'back'].map((type) => (
+                    <div key={type} className="relative">
+                      <label className="block cursor-pointer">
+                        <div className="w-full h-24 bg-dark-bg rounded-lg border-2 border-dashed border-gray-600 flex flex-col items-center justify-center hover:border-neon-green transition-all overflow-hidden">
+                          {photoPreview[type] ? (
+                            <img src={photoPreview[type]} alt={type} className="w-full h-full object-cover" />
+                          ) : (
+                            <>
+                              <span className="text-2xl">{type === 'front' ? '👤' : type === 'side' ? '↔️' : '🔙'}</span>
+                              <span className="text-xs text-gray-500 capitalize">{type}</span>
+                            </>
+                          )}
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handlePhotoUpload(e, type)}
+                        />
+                      </label>
+                    </div>
+                  ))}
                 </div>
               </div>
 

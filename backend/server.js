@@ -12,7 +12,10 @@ const dietRoutes = require("./routes/dietRoutes");
 const app = express();
 
 app.use(cors({
-  origin: true,
+  origin: [
+    'https://fitfat-sooty.vercel.app',
+    'http://localhost:3000'
+  ],
   credentials: true
 }));
 
