@@ -28,10 +28,26 @@ function WorkoutsContent() {
     name: '',
     exercises: [{ name: '', sets: 3, reps: 10, weight: 0, muscleGroup: 'chest' }],
   });
+  const [workoutStartTime, setWorkoutStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
     fetchWorkouts();
   }, []);
+
+  useEffect(() => {
+    if (!workoutStartTime) return;
+    const interval = setInterval(() => {
+      setElapsedTime(Math.floor((Date.now() - workoutStartTime) / 1000));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [workoutStartTime]);
+
+  const formatTime = (totalSecs) => {
+    const m = Math.floor(totalSecs / 60);
+    const s = totalSecs % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
 
   const fetchWorkouts = async () => {
     try {
@@ -47,15 +63,21 @@ function WorkoutsContent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const submitData = { ...formData };
+      if (workoutStartTime) {
+        submitData.duration = Math.round((Date.now() - workoutStartTime) / 1000 / 60);
+      }
       if (editingWorkout) {
-        await workoutAPI.updateWorkout(editingWorkout._id, formData);
+        await workoutAPI.updateWorkout(editingWorkout._id, submitData);
         toast.success('Workout updated!');
       } else {
-        await workoutAPI.createWorkout(formData);
+        await workoutAPI.createWorkout(submitData);
         toast.success('Workout created!');
       }
       setShowModal(false);
       setEditingWorkout(null);
+      setWorkoutStartTime(null);
+      setElapsedTime(0);
       setFormData({
         name: '',
         exercises: [{ name: '', sets: 3, reps: 10, weight: 0, muscleGroup: 'chest' }],
@@ -266,7 +288,7 @@ function WorkoutsContent() {
                 <div>
                   <h3 className="text-xl font-bold text-neon-green">{workout.name}</h3>
                   <p className="text-gray-400 text-sm">
-                    {new Date(workout.date).toLocaleDateString()} | {workout.exercises.length} exercises
+                    {new Date(workout.date).toLocaleDateString()} | {workout.exercises.length} exercises{workout.duration ? ` | ${workout.duration}min` : ''}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -343,9 +365,26 @@ function WorkoutsContent() {
               className="glass-card p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="text-2xl font-heading font-bold mb-6">
+              <h2 className="text-2xl font-heading font-bold mb-2">
                 {editingWorkout ? 'Edit Workout' : 'New Workout'}
               </h2>
+              {!editingWorkout && (
+                <div className="flex items-center gap-3 mb-6">
+                  {workoutStartTime ? (
+                    <>
+                      <div className="flex items-center gap-2 px-4 py-2 bg-neon-green/20 rounded-lg">
+                        <span className="w-2 h-2 bg-neon-green rounded-full animate-pulse"></span>
+                        <span className="text-neon-green font-mono text-lg font-bold">{formatTime(elapsedTime)}</span>
+                      </div>
+                      <button type="button" onClick={() => { setWorkoutStartTime(null); setElapsedTime(0); }} className="text-xs text-gray-400 hover:text-red-400">Reset</button>
+                    </>
+                  ) : (
+                    <button type="button" onClick={() => setWorkoutStartTime(Date.now())} className="px-4 py-2 bg-neon-purple/20 text-neon-purple rounded-lg text-sm font-bold hover:bg-neon-purple/30">
+                      ⏱ Start Timer
+                    </button>
+                  )}
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
