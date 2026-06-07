@@ -134,6 +134,7 @@ function ProgressContent() {
   });
   const [photos, setPhotos] = useState({ front: '', side: '', back: '' });
   const [photoPreview, setPhotoPreview] = useState({ front: '', side: '', back: '' });
+  const [zoomPhoto, setZoomPhoto] = useState(null);
   const toast = useToast();
 
   useEffect(() => {
@@ -355,7 +356,7 @@ function ProgressContent() {
                     {['front', 'side', 'back'].map((type) => (
                       selectedEntry.photos[type] && (
                         <div key={type} className="text-center">
-                          <img src={selectedEntry.photos[type]} alt={type} className="w-full h-32 object-cover rounded-lg" />
+                          <img src={selectedEntry.photos[type]} alt={type} className="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity" onClick={() => setZoomPhoto(selectedEntry.photos[type])} />
                           <p className="text-xs text-gray-500 mt-1 capitalize">{type}</p>
                         </div>
                       )
@@ -585,6 +586,19 @@ function ProgressContent() {
               </div>
             </form>
           </motion.div>
+        </motion.div>
+      )}
+
+      {zoomPhoto && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          onClick={() => setZoomPhoto(null)}
+        >
+          <button onClick={() => setZoomPhoto(null)} className="absolute top-4 right-4 text-white text-3xl hover:text-gray-300">✕</button>
+          <img src={zoomPhoto} alt="Progress photo zoom" className="max-w-full max-h-[85vh] object-contain rounded-lg" />
         </motion.div>
       )}
     </div>
