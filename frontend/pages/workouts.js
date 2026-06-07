@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { workoutAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
@@ -345,7 +345,8 @@ function WorkoutsContent() {
                   </thead>
                   <tbody>
                     {workout.exercises.map((ex, i) => (
-                      <tr key={i} className="border-b border-gray-800">
+                      <Fragment key={i}>
+                      <tr className="border-b border-gray-800">
                         <td className="py-2">{ex.name}</td>
                         <td className="py-2">
                           <span className="px-2 py-1 bg-dark-bg rounded text-xs capitalize">
@@ -360,10 +361,11 @@ function WorkoutsContent() {
                         </td>
                       </tr>
                       {ex.notes && (
-                        <tr key={`${index}-notes`}>
+                        <tr key={`${i}-notes`}>
                           <td colSpan="5" className="py-1 pl-8 text-xs text-gray-500 italic">📝 {ex.notes}</td>
                         </tr>
                       )}
+                      </Fragment>
                     ))}
                   </tbody>
                 </table>
