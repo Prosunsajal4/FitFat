@@ -15,6 +15,7 @@ import {
 } from 'chart.js';
 import { workoutAPI, nutritionAPI, progressAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import DBStatusBanner from '../components/DBStatusBanner';
 
 ChartJS.register(
   CategoryScale,
@@ -148,6 +149,7 @@ function AnalyticsContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <div>
         <h1 className="text-3xl font-heading font-bold">Analytics Dashboard</h1>
         <p className="text-gray-400">Deep dive into your fitness data</p>

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import DBStatusBanner from '../components/DBStatusBanner';
 import { useToast } from '../components/Toast';
 
 const badges = {
@@ -66,6 +67,7 @@ function ProfileContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <h1 className="text-3xl font-heading font-bold">Profile</h1>
 
       <div className="grid md:grid-cols-2 gap-6">

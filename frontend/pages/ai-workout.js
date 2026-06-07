@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { aiAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import ProtectedRoute from '../components/ProtectedRoute';
+import DBStatusBanner from '../components/DBStatusBanner';
 
 function AIWorkoutContent() {
   const { user, updateUser } = useAuth();
@@ -42,6 +43,7 @@ function AIWorkoutContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <div>
         <h1 className="text-3xl font-heading font-bold">AI Workout Generator</h1>
         <p className="text-gray-400">Get a personalized workout plan based on your goals</p>

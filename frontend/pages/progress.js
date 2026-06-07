@@ -13,6 +13,7 @@ import {
 } from 'chart.js';
 import { progressAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import DBStatusBanner from '../components/DBStatusBanner';
 import { useToast } from '../components/Toast';
 import { SkeletonCard, SkeletonChart } from '../components/Skeleton';
 
@@ -263,6 +264,7 @@ function ProgressContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-heading font-bold">Body Progress</h1>

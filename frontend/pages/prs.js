@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { prAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import DBStatusBanner from '../components/DBStatusBanner';
 import { useToast } from '../components/Toast';
 import { SkeletonCard } from '../components/Skeleton';
 
@@ -78,6 +79,7 @@ function PRsContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-heading font-bold">Personal Records 🏆</h1>

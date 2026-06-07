@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { workoutAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import DBStatusBanner from '../components/DBStatusBanner';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -122,6 +123,7 @@ function MuscleBalanceContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <div>
         <h1 className="text-3xl font-heading font-bold">Muscle Balance Analyzer</h1>
         <p className="text-gray-400">Identify overtrained and neglected muscle groups</p>

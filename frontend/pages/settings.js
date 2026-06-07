@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import DBStatusBanner from '../components/DBStatusBanner';
 import { useToast } from '../components/Toast';
 
 function SettingsContent() {
@@ -42,6 +43,7 @@ function SettingsContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <div>
         <h1 className="text-3xl font-heading font-bold">Settings ⚙️</h1>
         <p className="text-gray-400">Configure your nutrition targets</p>

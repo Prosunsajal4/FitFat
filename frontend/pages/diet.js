@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { dietAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import DBStatusBanner from '../components/DBStatusBanner';
 
 const workoutTypes = [
   { id: 'Push', nameBn: 'পুশ ডে', nameEn: 'Push Day', icon: '💪', descBn: 'বুক, কাঁধ, ট্রাইসেপস', descEn: 'Chest, Shoulders, Triceps' },
@@ -54,6 +55,7 @@ function DietContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-heading font-bold">{lang === 'bn' ? 'বাংলাদেশি ডায়েট প্ল্যান 🇧🇩' : 'Bangladeshi Diet Plan 🇧🇩'}</h1>
