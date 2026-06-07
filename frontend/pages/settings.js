@@ -10,11 +10,26 @@ function SettingsContent() {
   const { user, updateUser } = useAuth();
   const toast = useToast();
   const [saving, setSaving] = useState(false);
+  const [amoledMode, setAmoledMode] = useState(false);
   const [targets, setTargets] = useState({
     dailyCalorieTarget: user?.settings?.dailyCalorieTarget || 2000,
     proteinTarget: user?.settings?.proteinTarget || 150,
     waterGoal: user?.settings?.waterGoal || 8,
   });
+
+  useEffect(() => {
+    const saved = localStorage.getItem('amoledMode') === 'true';
+    setAmoledMode(saved);
+    if (saved) document.documentElement.classList.add('amoled');
+  }, []);
+
+  const toggleAmoled = () => {
+    const next = !amoledMode;
+    setAmoledMode(next);
+    localStorage.setItem('amoledMode', next);
+    document.documentElement.classList.toggle('amoled', next);
+    toast.info(next ? 'AMOLED mode enabled - true black background' : 'AMOLED mode disabled');
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -50,6 +65,26 @@ function SettingsContent() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card p-6"
+        >
+          <h3 className="font-heading font-bold text-lg mb-4">Display Settings</h3>
+          <div className="flex items-center justify-between p-4 bg-dark-bg rounded-lg">
+            <div>
+              <p className="font-bold">AMOLED / OLED Mode</p>
+              <p className="text-xs text-gray-400">True black background for OLED screens</p>
+            </div>
+            <button
+              onClick={toggleAmoled}
+              className={`relative w-12 h-6 rounded-full transition-colors ${amoledMode ? 'bg-neon-green' : 'bg-gray-600'}`}
+            >
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${amoledMode ? 'translate-x-6' : ''}`} />
+            </button>
+          </div>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

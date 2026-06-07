@@ -166,3 +166,24 @@ button:hover {
   min-height: 44px;
   min-width: 44px;
 }
+
+.amoled {
+  --dark-bg: #000000;
+}
+
+.amoled body,
+.amoled {
+  background: #000000;
+}
+
+.amoled .glass-card {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.amoled input,
+.amoled select,
+.amoled textarea {
+  background: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.1);
+}
