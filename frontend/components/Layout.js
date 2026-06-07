@@ -15,6 +15,7 @@ const navItems = [
   { name: 'AI Coach', path: '/coach', icon: '💬' },
   { name: 'Analytics', path: '/analytics', icon: '📉' },
   { name: 'Muscle Balance', path: '/muscle-balance', icon: '⚖️' },
+  { name: 'Settings', path: '/settings', icon: '⚙️' },
   { name: 'Profile', path: '/profile', icon: '👤' },
 ];
 
