@@ -212,21 +212,17 @@ function NutritionContent() {
           <div className="flex items-center justify-center gap-2 mb-2">
             <span className="text-4xl">💧</span>
             <span className="text-3xl font-bold text-cyan-400">{waterIntake}</span>
-            <span className="text-gray-400">/ {targets.waterGoal}</span>
+            <span className="text-gray-400">/ {targets.waterGoal} glasses</span>
           </div>
-          <div className="flex justify-center gap-2">
-            <button
-              onClick={() => updateWater(Math.max(0, waterIntake - 1))}
-              className="px-3 py-1 bg-gray-700 rounded"
-            >
-              -
-            </button>
-            <button
-              onClick={() => updateWater(waterIntake + 1)}
-              className="px-3 py-1 bg-neon-green text-black rounded font-bold"
-            >
-              +
-            </button>
+          <div className="flex justify-center gap-1 mb-2">
+            <button onClick={() => updateWater(Math.max(0, waterIntake - 1))} className="px-3 py-1 bg-gray-700 rounded">-</button>
+            <button onClick={() => updateWater(waterIntake + 1)} className="px-3 py-1 bg-neon-green text-black rounded font-bold">+1</button>
+            <button onClick={() => updateWater(waterIntake + 2)} className="px-3 py-1 bg-neon-green text-black rounded font-bold">+2</button>
+          </div>
+          <div className="flex justify-center gap-1">
+            {[250, 500, 750].map(ml => (
+              <button key={ml} onClick={() => updateWater(waterIntake + Math.round(ml / 250))} className="px-2 py-1 text-xs bg-gray-700 hover:bg-gray-600 rounded">{ml}ml</button>
+            ))}
           </div>
         </motion.div>
       </div>
