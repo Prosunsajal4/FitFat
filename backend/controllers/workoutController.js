@@ -238,6 +238,10 @@ const updateUserStats = async (userId) => {
       user.stats.streak = 1;
     }
 
+    if ((user.stats.streak || 0) > (user.stats.bestStreak || 0)) {
+      user.stats.bestStreak = user.stats.streak;
+    }
+
     user.stats.lastWorkoutDate = lastWorkout.date;
   }
 

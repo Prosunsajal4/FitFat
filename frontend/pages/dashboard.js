@@ -161,6 +161,9 @@ function DashboardContent() {
           <div className="text-3xl mb-1">🔥</div>
           <p className="text-2xl font-bold text-neon-green">{stats?.userStats?.streak || 0}</p>
           <p className="text-gray-400 text-sm">Day Streak</p>
+          {stats?.userStats?.bestStreak > 0 && (
+            <p className="text-yellow-400 text-xs mt-1">Best: {stats.userStats.bestStreak} days</p>
+          )}
         </motion.div>
 
         <motion.div
