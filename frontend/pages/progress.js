@@ -428,6 +428,7 @@ function ProgressContent() {
                   <th className="text-right py-3">Arms</th>
                   <th className="text-right py-3">Waist</th>
                   <th className="text-right py-3">Body Fat</th>
+                  <th className="text-right py-3"></th>
                 </tr>
               </thead>
               <tbody>
@@ -439,6 +440,22 @@ function ProgressContent() {
                     <td className="py-3 text-right">{entry.arms || '-'} cm</td>
                     <td className="py-3 text-right">{entry.waist || '-'} cm</td>
                     <td className="py-3 text-right">{entry.bodyFat || '-'}%</td>
+                    <td className="py-3 text-right">
+                      <button
+                        onClick={async () => {
+                          try {
+                            await progressAPI.deleteProgress(entry._id);
+                            toast.success('Entry deleted');
+                            fetchProgress();
+                          } catch (error) {
+                            toast.error('Failed to delete');
+                          }
+                        }}
+                        className="text-gray-500 hover:text-red-400 text-sm"
+                      >
+                        🗑️
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
