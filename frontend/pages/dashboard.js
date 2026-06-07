@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Bar, Line } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
-  LineElement,
   PointElement,
+  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
-  ArcElement,
 } from 'chart.js';
-import { workoutAPI, aiAPI, progressAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import api from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { SkeletonCard, SkeletonChart } from '../components/Skeleton';
 
 ChartJS.register(
   CategoryScale,
@@ -121,8 +121,14 @@ function DashboardContent() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-neon-green border-t-transparent rounded-full animate-spin"></div>
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+        <div className="grid lg:grid-cols-2 gap-6">
+          <SkeletonChart />
+          <SkeletonChart />
+        </div>
       </div>
     );
   }

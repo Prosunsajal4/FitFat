@@ -14,6 +14,7 @@ import {
 import { progressAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { useToast } from '../components/Toast';
+import { SkeletonCard, SkeletonChart } from '../components/Skeleton';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -248,8 +249,14 @@ function ProgressContent() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-neon-green border-t-transparent rounded-full animate-spin"></div>
+      <div className="space-y-6">
+        <div className="grid lg:grid-cols-3 gap-6">
+          <SkeletonCard />
+          <div className="lg:col-span-2 grid lg:grid-cols-2 gap-6">
+            <SkeletonChart />
+            <SkeletonChart />
+          </div>
+        </div>
       </div>
     );
   }

@@ -7,6 +7,7 @@ import WorkoutCalendar from '../components/WorkoutCalendar';
 import ExerciseDatabase from '../components/ExerciseDatabase';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { useToast } from '../components/Toast';
+import { SkeletonCard } from '../components/Skeleton';
 
 const muscleGroups = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'other'];
 
@@ -135,8 +136,8 @@ function WorkoutsContent() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-neon-green border-t-transparent rounded-full animate-spin"></div>
+      <div className="space-y-4">
+        {[...Array(3)].map((_, i) => <SkeletonCard key={i} />)}
       </div>
     );
   }
