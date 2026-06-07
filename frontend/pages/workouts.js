@@ -335,6 +335,11 @@ function WorkoutsContent() {
                           {ex.sets * ex.reps * (ex.weight || 0)}
                         </td>
                       </tr>
+                      {ex.notes && (
+                        <tr key={`${index}-notes`}>
+                          <td colSpan="5" className="py-1 pl-8 text-xs text-gray-500 italic">📝 {ex.notes}</td>
+                        </tr>
+                      )}
                     ))}
                   </tbody>
                 </table>
@@ -485,6 +490,13 @@ function WorkoutsContent() {
                           step="0.5"
                         />
                       </div>
+                      <input
+                        type="text"
+                        value={ex.notes || ''}
+                        onChange={(e) => updateExercise(index, 'notes', e.target.value)}
+                        className="w-full px-3 py-1 mt-2 rounded text-sm bg-dark-bg"
+                        placeholder="Notes (e.g., slow tempo, drop set)"
+                      />
                     </div>
                   ))}
                 </div>
