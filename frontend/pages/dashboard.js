@@ -11,6 +11,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  ArcElement,
 } from 'chart.js';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
