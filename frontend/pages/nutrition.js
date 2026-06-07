@@ -372,6 +372,32 @@ function NutritionContent() {
           </motion.div>
         </motion.div>
       )}
+
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-6">
+        <h3 className="font-heading font-bold text-lg mb-4">📊 Daily Summary</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="text-center p-3 bg-dark-bg rounded-lg">
+            <p className="text-xs text-gray-400">Calories</p>
+            <p className="text-xl font-bold text-neon-green">{totalCalories} / {targets.dailyCalorieTarget}</p>
+            <p className="text-xs text-gray-500">{Math.max(0, targets.dailyCalorieTarget - totalCalories)} remaining</p>
+          </div>
+          <div className="text-center p-3 bg-dark-bg rounded-lg">
+            <p className="text-xs text-gray-400">Protein</p>
+            <p className="text-xl font-bold text-neon-purple">{totalProtein}g / {targets.proteinTarget}g</p>
+            <p className="text-xs text-gray-500">{Math.max(0, targets.proteinTarget - totalProtein)}g remaining</p>
+          </div>
+          <div className="text-center p-3 bg-dark-bg rounded-lg">
+            <p className="text-xs text-gray-400">Carbs</p>
+            <p className="text-xl font-bold text-cyan-400">{totalCarbs}g</p>
+            <p className="text-xs text-gray-500">{totalMeals} meals logged</p>
+          </div>
+          <div className="text-center p-3 bg-dark-bg rounded-lg">
+            <p className="text-xs text-gray-400">Fats</p>
+            <p className="text-xl font-bold text-yellow-400">{totalFats}g</p>
+            <p className="text-xs text-gray-500">💧 {waterIntake} / {targets.waterGoal} glasses</p>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
