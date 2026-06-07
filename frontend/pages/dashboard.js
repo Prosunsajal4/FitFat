@@ -36,6 +36,7 @@ function DashboardContent() {
   const [stats, setStats] = useState(null);
   const [recommendation, setRecommendation] = useState(null);
   const [weightData, setWeightData] = useState(null);
+  const [lastWorkout, setLastWorkout] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,15 +45,17 @@ function DashboardContent() {
 
   const fetchDashboardData = async () => {
     try {
-      const [statsRes, recRes, progressRes] = await Promise.all([
+      const [statsRes, recRes, progressRes, workoutRes] = await Promise.all([
         workoutAPI.getStats(),
         aiAPI.getRecommendations(),
         progressAPI.getChart({ period: 30 }),
+        workoutAPI.getWorkouts({ limit: 1 }),
       ]);
 
       setStats(statsRes.data);
       setRecommendation(recRes.data.recommendations?.[0]);
       setWeightData(progressRes.data);
+      if (workoutRes.data?.length > 0) setLastWorkout(workoutRes.data[0]);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     } finally {
@@ -234,6 +237,30 @@ function DashboardContent() {
           </div>
         </motion.div>
       </div>
+
+      {lastWorkout && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-6">
+          <h3 className="font-heading font-bold text-lg mb-4">Last Workout</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="text-neon-green font-bold text-lg">{lastWorkout.name}</h4>
+            <span className="text-gray-400 text-sm">{new Date(lastWorkout.date).toLocaleDateString()}</span>
+          </div>
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <p className="text-2xl font-bold text-neon-purple">{lastWorkout.exercises?.length || 0}</p>
+              <p className="text-gray-400 text-xs">Exercises</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-neon-green">{lastWorkout.exercises?.reduce((sum, e) => sum + (e.sets || 0) * (e.reps || 0) * (e.weight || 0), 0).toLocaleString() || 0}</p>
+              <p className="text-gray-400 text-xs">Total Volume (kg)</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-orange-400">{lastWorkout.exercises?.reduce((sum, e) => sum + (e.sets || 0), 0) || 0}</p>
+              <p className="text-gray-400 text-xs">Total Sets</p>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       <div className="grid lg:grid-cols-3 gap-6">
         {recommendation && (
