@@ -1,5 +1,6 @@
 const Workout = require('../models/Workout');
 const User = require('../models/User');
+const PersonalRecord = require('../models/PersonalRecord');
 
 const createWorkout = async (req, res) => {
   try {
@@ -14,9 +15,41 @@ const createWorkout = async (req, res) => {
 
     await updateUserStats(req.user._id);
 
+    for (const ex of (exercises || [])) {
+      if (ex.name && ex.weight > 0) {
+        try {
+          const pr = await PersonalRecord.findOne({ user: req.user._id, exercise: ex.name });
+          if (!pr || ex.weight > pr.bestWeight) {
+            const volume = ex.sets * ex.reps * ex.weight;
+            const estimated1RM = ex.reps === 1 ? ex.weight : Math.round(ex.weight * (1 + ex.reps / 30));
+            if (pr) {
+              pr.bestWeight = ex.weight;
+              if (volume > pr.bestVolume) pr.bestVolume = volume;
+              if (ex.reps > pr.bestReps) pr.bestReps = ex.reps;
+              if (estimated1RM > pr.estimated1RM) pr.estimated1RM = estimated1RM;
+              pr.history.push({ weight: ex.weight, reps: ex.reps, sets: ex.sets, volume, date: new Date() });
+              pr.lastDate = new Date();
+              await pr.save();
+            } else {
+              await PersonalRecord.create({
+                user: req.user._id,
+                exercise: ex.name,
+                muscleGroup: ex.muscleGroup || 'other',
+                bestWeight: ex.weight,
+                bestVolume: volume,
+                bestReps: ex.reps,
+                estimated1RM,
+                lastDate: new Date(),
+                history: [{ weight: ex.weight, reps: ex.reps, sets: ex.sets, volume, date: new Date() }]
+              });
+            }
+          }
+        } catch (prErr) {}
+      }
+    }
+
     res.status(201).json(workout);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
