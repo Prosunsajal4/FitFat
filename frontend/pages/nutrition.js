@@ -326,7 +326,26 @@ function NutritionContent() {
           onClick={() => setShowMealModal(false)}
         >
           <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="glass-card p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-2xl font-heading font-bold mb-6">Log Meal</h2>
+            <h2 className="text-2xl font-heading font-bold mb-4">Log Meal</h2>
+            <div className="mb-4">
+              <p className="text-xs text-gray-400 mb-2">Quick Add (Bangladeshi)</p>
+              <div className="flex flex-wrap gap-1">
+                {[
+                  { name: 'Chicken Rice', cal: 450, p: 35, c: 55, f: 8, t: 'lunch' },
+                  { name: 'Fish + Rice', cal: 400, p: 30, c: 55, f: 7, t: 'lunch' },
+                  { name: 'Dal + Rice', cal: 350, p: 15, c: 65, f: 4, t: 'lunch' },
+                  { name: 'Eggs (2)', cal: 160, p: 14, c: 1, f: 11, t: 'breakfast' },
+                  { name: 'Banana', cal: 105, p: 1, c: 27, f: 0, t: 'snack' },
+                  { name: 'Milk', cal: 150, p: 8, c: 12, f: 8, t: 'snack' },
+                  { name: 'Roti + Sabzi', cal: 250, p: 8, c: 40, f: 6, t: 'dinner' },
+                  { name: 'Paratha', cal: 300, p: 6, c: 40, f: 14, t: 'breakfast' },
+                ].map((q) => (
+                  <button key={q.name} type="button" onClick={() => setMealForm({ name: q.name, calories: q.cal, protein: q.p, carbs: q.c, fats: q.f, type: q.t })} className="px-2 py-1 text-xs bg-gray-700 hover:bg-gray-600 rounded transition-colors">
+                    {q.name}
+                  </button>
+                ))}
+              </div>
+            </div>
             <form onSubmit={addMeal} className="space-y-4">
               <div>
                 <label className="block text-gray-400 mb-2">Meal Type</label>
