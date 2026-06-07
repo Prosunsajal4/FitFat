@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { useToast } from '../components/Toast';
 
 const badges = {
   '7-day-streak': { name: '7-Day Streak', icon: '🔥', description: 'Workout 7 days in a row' },
@@ -31,6 +32,7 @@ function ProfileContent() {
     age: user?.body?.age || 0,
   });
   const [saving, setSaving] = useState(false);
+  const toast = useToast();
 
   const currentLevel = levels.find((l) => l.level === (user?.stats?.level || 1)) || levels[0];
   const nextLevel = levels.find((l) => l.level === (user?.stats?.level || 1) + 1);
@@ -54,8 +56,9 @@ function ProfileContent() {
       const res = await authAPI.updateProfile(payload);
       updateUser(res.data);
       setEditing(false);
+      toast.success('Profile updated!');
     } catch (error) {
-      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile');
     } finally {
       setSaving(false);
     }

@@ -13,6 +13,7 @@ import {
 } from 'chart.js';
 import { nutritionAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { useToast } from '../components/Toast';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend);
 
@@ -31,6 +32,7 @@ function NutritionContent() {
     carbs: '',
     fats: '',
   });
+  const toast = useToast();
 
   useEffect(() => {
     fetchNutrition();
@@ -55,6 +57,7 @@ function NutritionContent() {
     e.preventDefault();
     try {
       await nutritionAPI.addMeal(mealForm);
+      toast.success('Meal added!');
       setShowMealModal(false);
       setMealForm({
         type: 'breakfast',
@@ -66,7 +69,7 @@ function NutritionContent() {
       });
       fetchNutrition();
     } catch (error) {
-      console.error('Error adding meal:', error);
+      toast.error('Failed to add meal');
     }
   };
 
@@ -75,7 +78,7 @@ function NutritionContent() {
       await nutritionAPI.updateWater({ waterIntake: glasses });
       fetchNutrition();
     } catch (error) {
-      console.error('Error updating water:', error);
+      toast.error('Failed to update water');
     }
   };
 

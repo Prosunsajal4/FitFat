@@ -13,6 +13,7 @@ import {
 } from 'chart.js';
 import { progressAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { useToast } from '../components/Toast';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -131,6 +132,7 @@ function ProgressContent() {
   });
   const [photos, setPhotos] = useState({ front: '', side: '', back: '' });
   const [photoPreview, setPhotoPreview] = useState({ front: '', side: '', back: '' });
+  const toast = useToast();
 
   useEffect(() => {
     fetchProgress();
@@ -166,6 +168,7 @@ function ProgressContent() {
     e.preventDefault();
     try {
       await progressAPI.addProgress({ ...formData, photos });
+      toast.success('Progress logged!');
       setShowModal(false);
       setFormData({ weight: '', chest: '', arms: '', waist: '', bodyFat: '' });
       setPhotos({ front: '', side: '', back: '' });
@@ -173,6 +176,7 @@ function ProgressContent() {
       fetchProgress();
     } catch (error) {
       console.error('Error adding progress:', error);
+      toast.error('Failed to save progress');
     }
   };
 

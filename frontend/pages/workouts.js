@@ -5,6 +5,8 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import RestTimer from '../components/RestTimer';
 import WorkoutCalendar from '../components/WorkoutCalendar';
 import ExerciseDatabase from '../components/ExerciseDatabase';
+import ConfirmDialog from '../components/ConfirmDialog';
+import { useToast } from '../components/Toast';
 
 const muscleGroups = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'other'];
 
@@ -18,6 +20,8 @@ function WorkoutsContent() {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [editingWorkout, setEditingWorkout] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState({ show: false, id: null });
+  const toast = useToast();
   const [formData, setFormData] = useState({
     name: '',
     exercises: [{ name: '', sets: 3, reps: 10, weight: 0, muscleGroup: 'chest' }],
@@ -43,8 +47,10 @@ function WorkoutsContent() {
     try {
       if (editingWorkout) {
         await workoutAPI.updateWorkout(editingWorkout._id, formData);
+        toast.success('Workout updated!');
       } else {
         await workoutAPI.createWorkout(formData);
+        toast.success('Workout created!');
       }
       setShowModal(false);
       setEditingWorkout(null);
@@ -55,17 +61,34 @@ function WorkoutsContent() {
       fetchWorkouts();
     } catch (error) {
       console.error('Error saving workout:', error);
+      toast.error('Failed to save workout');
+    }
+  };
+
+  const deleteWorkout = async (id) => {
+    try {
+      await workoutAPI.deleteWorkout(id);
+      toast.success('Workout deleted!');
+      fetchWorkouts();
+    } catch (error) {
+      console.error('Error deleting workout:', error);
+      toast.error('Failed to delete workout');
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete this workout?')) return;
+    setDeleteConfirm({ show: true, id });
+  };
+
+  const confirmDelete = async () => {
     try {
-      await workoutAPI.deleteWorkout(id);
+      await workoutAPI.deleteWorkout(deleteConfirm.id);
+      toast.success('Workout deleted!');
       fetchWorkouts();
     } catch (error) {
-      console.error('Error deleting workout:', error);
+      toast.error('Failed to delete workout');
     }
+    setDeleteConfirm({ show: false, id: null });
   };
 
   const handleEdit = (workout) => {
@@ -465,6 +488,15 @@ function WorkoutsContent() {
           />
         )}
       </AnimatePresence>
+
+      <ConfirmDialog
+        isOpen={deleteConfirm.show}
+        title="Delete Workout"
+        message="This action cannot be undone. Are you sure?"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteConfirm({ show: false, id: null })}
+        confirmText="Delete"
+      />
     </div>
   );
 }
