@@ -8,6 +8,7 @@ const progressRoutes = require("./routes/progressRoutes");
 const nutritionRoutes = require("./routes/nutritionRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const dietRoutes = require("./routes/dietRoutes");
+const prRoutes = require("./routes/prRoutes");
 
 const app = express();
 
@@ -86,6 +87,7 @@ app.use("/api/progress", ensureDB, progressRoutes);
 app.use("/api/nutrition", ensureDB, nutritionRoutes);
 app.use("/api/ai", ensureDB, aiRoutes);
 app.use("/api/diet", ensureDB, dietRoutes);
+app.use("/api/prs", ensureDB, prRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.message);

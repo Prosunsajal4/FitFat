@@ -92,4 +92,11 @@ export const dietAPI = {
   getDietPlan: (workoutType, lang = 'bn') => api.get('/diet', { params: { workoutType, lang } }),
 };
 
+export const prAPI = {
+  getPRs: () => api.get('/prs'),
+  getPR: (exercise) => api.get(`/prs/${encodeURIComponent(exercise)}`),
+  updatePR: (data) => api.post('/prs', data),
+  deletePR: (exercise) => api.delete(`/prs/${encodeURIComponent(exercise)}`),
+};
+
 export default api;

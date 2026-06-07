@@ -10,9 +10,11 @@ const navItems = [
   { name: 'AI Workout', path: '/ai-workout', icon: '🤖' },
   { name: 'Diet Plan', path: '/diet', icon: '🍛' },
   { name: 'Progress', path: '/progress', icon: '📈' },
+  { name: 'PRs', path: '/prs', icon: '🏆' },
   { name: 'Nutrition', path: '/nutrition', icon: '🥗' },
   { name: 'AI Coach', path: '/coach', icon: '💬' },
   { name: 'Analytics', path: '/analytics', icon: '📉' },
+  { name: 'Muscle Balance', path: '/muscle-balance', icon: '⚖️' },
   { name: 'Profile', path: '/profile', icon: '👤' },
 ];
 
