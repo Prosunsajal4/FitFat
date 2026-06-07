@@ -201,11 +201,36 @@ const getWeeklyStats = async (req, res) => {
   }
 };
 
+const deleteMeal = async (req, res) => {
+  try {
+    const { mealId } = req.params;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const nutrition = await Nutrition.findOne({
+      user: req.user._id,
+      date: { $gte: today, $lt: tomorrow }
+    });
+
+    if (!nutrition) return res.status(404).json({ message: 'No nutrition data found' });
+
+    nutrition.meals = nutrition.meals.filter(m => m._id.toString() !== mealId);
+    await nutrition.save();
+
+    res.json(nutrition);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 module.exports = {
   getTodayNutrition,
   addMeal,
   updateWater,
   getNutritionHistory,
   updateTargets,
-  getWeeklyStats
+  getWeeklyStats,
+  deleteMeal
 };

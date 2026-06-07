@@ -72,6 +72,7 @@ export const progressAPI = {
 export const nutritionAPI = {
   getToday: () => api.get('/nutrition/today'),
   addMeal: (data) => api.post('/nutrition/meal', data),
+  deleteMeal: (mealId) => api.delete(`/nutrition/meal/${mealId}`),
   updateWater: (data) => api.put('/nutrition/water', data),
   getHistory: (params) => api.get('/nutrition/history', { params }),
   updateTargets: (data) => api.put('/nutrition/targets', data),

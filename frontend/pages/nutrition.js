@@ -247,11 +247,27 @@ function NutritionContent() {
                       <p className="text-gray-500 text-sm">No meals logged</p>
                     ) : (
                       meals.map((meal, i) => (
-                        <div key={i} className="flex justify-between text-sm py-1 border-b border-gray-800 last:border-0">
+                        <div key={i} className="flex justify-between items-center text-sm py-1 border-b border-gray-800 last:border-0">
                           <span>{meal.name}</span>
-                          <span className="text-gray-400">
-                            {meal.calories}kcal | P:{meal.protein}g C:{meal.carbs}g F:{meal.fats}g
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-400">
+                              {meal.calories}kcal | P:{meal.protein}g C:{meal.carbs}g F:{meal.fats}g
+                            </span>
+                            <button
+                              onClick={async () => {
+                                try {
+                                  await nutritionAPI.deleteMeal(meal._id);
+                                  toast.success('Meal deleted');
+                                  fetchNutrition();
+                                } catch (error) {
+                                  toast.error('Failed to delete meal');
+                                }
+                              }}
+                              className="text-gray-500 hover:text-red-400"
+                            >
+                              ✕
+                            </button>
+                          </div>
                         </div>
                       ))
                     )}
