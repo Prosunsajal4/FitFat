@@ -8,6 +8,7 @@ import ExerciseDatabase from '../components/ExerciseDatabase';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { useToast } from '../components/Toast';
 import { SkeletonCard } from '../components/Skeleton';
+import DBStatusBanner from '../components/DBStatusBanner';
 
 const muscleGroups = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'other'];
 
@@ -144,6 +145,7 @@ function WorkoutsContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-heading font-bold">Workout Tracker</h1>

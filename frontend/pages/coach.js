@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { aiAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
+import DBStatusBanner from '../components/DBStatusBanner';
 
 const quickQuestions = [
   "What should I train today?",
@@ -88,6 +89,7 @@ function CoachContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-heading font-bold">AI Fitness Coach</h1>

@@ -17,6 +17,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { SkeletonCard, SkeletonChart } from '../components/Skeleton';
+import DBStatusBanner from '../components/DBStatusBanner';
 
 ChartJS.register(
   CategoryScale,
@@ -136,6 +137,7 @@ function DashboardContent() {
 
   return (
     <div className="space-y-6">
+      <DBStatusBanner />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-heading font-bold">Welcome back, {user?.name}!</h1>

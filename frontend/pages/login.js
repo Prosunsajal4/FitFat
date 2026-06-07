@@ -17,12 +17,20 @@ export default function Login() {
     setError('');
     setLoading(true);
 
-    const result = await login(email, password);
+    try {
+      const result = await login(email, password);
 
-    if (result.success) {
-      router.push('/dashboard');
-    } else {
-      setError(result.error || 'Login failed. Please try again.');
+      if (result.success) {
+        router.push('/dashboard');
+      } else {
+        setError(result.error || 'Login failed. Please try again.');
+      }
+    } catch (err) {
+      if (err?.dbUnavailable) {
+        setError('Database not available. The server is waking up from sleep. Please wait 30 seconds and try again.');
+      } else {
+        setError('Login failed. Please try again.');
+      }
     }
     setLoading(false);
   };

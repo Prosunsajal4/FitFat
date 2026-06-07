@@ -40,6 +40,10 @@ api.interceptors.response.use(
         window.location.href = '/login';
       }
     }
+    if (error.response?.status === 503) {
+      error.dbUnavailable = true;
+      error.friendlyMessage = error.response?.data?.message || 'Database not available. Please try again.';
+    }
     return Promise.reject(error);
   }
 );
