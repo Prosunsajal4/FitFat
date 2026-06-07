@@ -35,9 +35,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setError(null);
-      console.log('Logging in to:', api.defaults.baseURL);
       const response = await api.post('/auth/login', { email, password });
-      console.log('Login response:', response.data);
       
       const { token, ...userData } = response.data;
 
@@ -65,7 +63,6 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password, goal, experience) => {
     try {
       setError(null);
-      console.log('Registering to:', api.defaults.baseURL);
       const response = await api.post('/auth/register', {
         name,
         email,
@@ -73,7 +70,6 @@ export const AuthProvider = ({ children }) => {
         goal,
         experience
       });
-      console.log('Register response:', response.data);
       
       const { token, ...userData } = response.data;
 
