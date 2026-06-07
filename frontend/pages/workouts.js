@@ -49,6 +49,23 @@ function WorkoutsContent() {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
+  const shareWorkout = (workout) => {
+    let text = `💪 ${workout.name} — ${new Date(workout.date).toLocaleDateString()}\n`;
+    if (workout.duration) text += `⏱ ${workout.duration} min\n`;
+    text += `📊 Volume: ${workout.totalVolume?.toLocaleString() || 0} kg\n\n`;
+    workout.exercises.forEach((ex) => {
+      text += `${ex.name}: ${ex.sets}x${ex.reps} @ ${ex.weight}kg`;
+      if (ex.notes) text += ` (${ex.notes})`;
+      text += '\n';
+    });
+    text += `\n🔥 ${workout.caloriesBurned || 0} kcal burned`;
+    navigator.clipboard.writeText(text).then(() => {
+      toast.success('Workout copied to clipboard!');
+    }).catch(() => {
+      toast.error('Failed to copy');
+    });
+  };
+
   const fetchWorkouts = async () => {
     try {
       const res = await workoutAPI.getWorkouts({ limit: 50 });
@@ -292,6 +309,13 @@ function WorkoutsContent() {
                   </p>
                 </div>
                 <div className="flex gap-2">
+                  <button
+                    onClick={() => shareWorkout(workout)}
+                    className="p-2 text-gray-400 hover:text-cyan-400"
+                    title="Copy to clipboard"
+                  >
+                    📋
+                  </button>
                   <button
                     onClick={() => handleEdit(workout)}
                     className="p-2 text-gray-400 hover:text-neon-green"
