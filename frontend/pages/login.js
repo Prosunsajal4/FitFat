@@ -17,19 +17,16 @@ export default function Login() {
     setError('');
     setLoading(true);
 
-    try {
-      const result = await login(email, password);
+    const result = await login(email, password);
 
-      if (result.success) {
-        router.push('/dashboard');
+    if (result.success) {
+      router.push('/dashboard');
+    } else {
+      const errMsg = result.error || 'Login failed. Please try again.';
+      if (errMsg.includes('Database not available') || errMsg.includes('503')) {
+        setError('Database is waking up from cold start. Please wait 30 seconds and try again.');
       } else {
-        setError(result.error || 'Login failed. Please try again.');
-      }
-    } catch (err) {
-      if (err?.dbUnavailable) {
-        setError('Database not available. The server is waking up from sleep. Please wait 30 seconds and try again.');
-      } else {
-        setError('Login failed. Please try again.');
+        setError(errMsg);
       }
     }
     setLoading(false);

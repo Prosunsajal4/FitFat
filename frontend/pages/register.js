@@ -37,7 +37,12 @@ export default function Register() {
     if (result.success) {
       router.push('/dashboard');
     } else {
-      setError(result.error);
+      const errMsg = result.error || 'Registration failed.';
+      if (errMsg.includes('Database not available') || errMsg.includes('503')) {
+        setError('Database is waking up from cold start. Please wait 30 seconds and try again.');
+      } else {
+        setError(errMsg);
+      }
     }
     setLoading(false);
   };

@@ -25,33 +25,37 @@ app.use(express.urlencoded({ extended: true }));
 
 let mongoConnected = false;
 let mongoConnecting = false;
+let mongoConnectPromise = null;
 
 const connectDB = async () => {
   if (mongoConnected) return true;
-  if (mongoConnecting) return false;
+  if (mongoConnecting && mongoConnectPromise) return mongoConnectPromise;
 
-  try {
-    const mongoUri = process.env.MONGODB_URI;
-    if (!mongoUri) {
-      console.log("No MONGODB_URI found");
-      return false;
-    }
-    mongoConnecting = true;
-    await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 30000,
-      maxPoolSize: 10,
-    });
+  const mongoUri = process.env.MONGODB_URI;
+  if (!mongoUri) {
+    console.log("No MONGODB_URI found");
+    return false;
+  }
+
+  mongoConnecting = true;
+  mongoConnectPromise = mongoose.connect(mongoUri, {
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 30000,
+    maxPoolSize: 10,
+  }).then(() => {
     mongoConnected = true;
     mongoConnecting = false;
     console.log("MongoDB Connected");
     return true;
-  } catch (err) {
+  }).catch((err) => {
     console.log("MongoDB Connection Error:", err.message);
     mongoConnected = false;
     mongoConnecting = false;
+    mongoConnectPromise = null;
     return false;
-  }
+  });
+
+  return mongoConnectPromise;
 };
 
 const ensureDB = async (req, res, next) => {
