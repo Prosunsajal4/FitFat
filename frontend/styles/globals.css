@@ -54,6 +54,18 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(135deg, rgba(57, 255, 20, 0.1) 0%, rgba(176, 38, 255, 0.1) 100%);
 }
 
+.animated-gradient {
+  background: linear-gradient(-45deg, rgba(57, 255, 20, 0.05), rgba(176, 38, 255, 0.05), rgba(0, 200, 255, 0.05), rgba(57, 255, 20, 0.05));
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .gradient-text {
   background: linear-gradient(135deg, var(--neon-green) 0%, var(--neon-purple) 100%);
   -webkit-background-clip: text;
