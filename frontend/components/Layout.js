@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import FloatingActionButton from './FloatingActionButton';
 
 const navItems = [
   { name: 'Dashboard', path: '/dashboard', icon: '📊' },
@@ -139,6 +140,7 @@ export default function Layout({ children }) {
           {children}
         </main>
       </div>
+      <FloatingActionButton />
     </div>
   );
 }
