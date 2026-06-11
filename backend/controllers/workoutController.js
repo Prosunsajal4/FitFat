@@ -220,29 +220,46 @@ const updateUserStats = async (userId) => {
   const user = await User.findById(userId);
   if (!user) return;
 
-  const lastWorkout = await Workout.findOne({ user: userId }).sort({ date: -1 });
+  const allWorkouts = await Workout.find({ user: userId }).sort({ date: -1 }).limit(2);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  if (lastWorkout) {
-    const lastDate = new Date(lastWorkout.date);
-    lastDate.setHours(0, 0, 0, 0);
+  if (allWorkouts.length > 0) {
+    const mostRecent = new Date(allWorkouts[0].date);
+    mostRecent.setHours(0, 0, 0, 0);
+    const dayDiffFromMostRecent = Math.floor((today - mostRecent) / (1000 * 60 * 60 * 24));
 
-    const dayDiff = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+    if (allWorkouts.length >= 2) {
+      const secondRecent = new Date(allWorkouts[1].date);
+      secondRecent.setHours(0, 0, 0, 0);
+      const gapBetween = Math.floor((mostRecent - secondRecent) / (1000 * 60 * 60 * 24));
 
-    if (dayDiff === 0) {
-      user.stats.streak = Math.max(user.stats.streak, 1);
-    } else if (dayDiff === 1) {
-      user.stats.streak = (user.stats.streak || 0) + 1;
-    } else if (dayDiff > 1) {
-      user.stats.streak = 1;
+      if (dayDiffFromMostRecent === 0) {
+        if (gapBetween === 1) {
+          user.stats.streak = (user.stats.streak || 0) + 1;
+        } else {
+          user.stats.streak = Math.max(user.stats.streak || 0, 1);
+        }
+      } else if (dayDiffFromMostRecent === 1) {
+        user.stats.streak = (user.stats.streak || 0) + 1;
+      } else if (dayDiffFromMostRecent > 1) {
+        user.stats.streak = 1;
+      }
+    } else {
+      if (dayDiffFromMostRecent === 0) {
+        user.stats.streak = Math.max(user.stats.streak || 0, 1);
+      } else if (dayDiffFromMostRecent === 1) {
+        user.stats.streak = (user.stats.streak || 0) + 1;
+      } else {
+        user.stats.streak = 1;
+      }
     }
 
     if ((user.stats.streak || 0) > (user.stats.bestStreak || 0)) {
       user.stats.bestStreak = user.stats.streak;
     }
 
-    user.stats.lastWorkoutDate = lastWorkout.date;
+    user.stats.lastWorkoutDate = allWorkouts[0].date;
   }
 
   user.stats.totalWorkouts = await Workout.countDocuments({ user: userId });
