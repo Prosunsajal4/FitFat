@@ -115,6 +115,20 @@ function DashboardContent() {
     return Math.min(Math.round((total / 7) * 100), 100);
   };
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  };
+
+  const getGreetingIcon = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return '🌅';
+    if (hour < 17) return '☀️';
+    return '🌙';
+  };
+
   const getMuscleBalanceScore = () => {
     if (!stats?.muscleGroups) return 50;
     const muscles = Object.values(stats.muscleGroups);
@@ -143,7 +157,7 @@ function DashboardContent() {
       <DBStatusBanner />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-heading font-bold">Welcome back, {user?.name}!</h1>
+          <h1 className="text-3xl font-heading font-bold">{getGreeting()}, {user?.name}! {getGreetingIcon()}</h1>
           <p className="text-gray-400">Here&apos;s your fitness overview</p>
         </div>
         <div className="text-right">
