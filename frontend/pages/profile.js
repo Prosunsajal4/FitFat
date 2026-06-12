@@ -86,20 +86,41 @@ function ProfileContent() {
             </div>
           </div>
 
-          <div className="mb-4">
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-gray-400">Level {user?.stats?.level || 1} - {currentLevel.name}</span>
-              <span className="text-neon-green">{user?.stats?.xp || 0} / {currentLevel.maxXP} XP</span>
+          <div className="mb-6">
+            <div className="flex items-center gap-4">
+              <div className="relative w-20 h-20 flex-shrink-0">
+                <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
+                  <circle cx="40" cy="40" r="35" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6" />
+                  <circle
+                    cx="40" cy="40" r="35" fill="none"
+                    stroke={currentLevel.color}
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 35}`}
+                    strokeDashoffset={`${2 * Math.PI * 35 * (1 - progressPercentage / 100)}`}
+                    className="transition-all duration-700"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-lg font-bold" style={{ color: currentLevel.color }}>{user?.stats?.level || 1}</span>
+                </div>
+              </div>
+              <div className="flex-1">
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-gray-400">Level {user?.stats?.level || 1} — {currentLevel.name}</span>
+                  <span className="text-neon-green">{user?.stats?.xp || 0} / {currentLevel.maxXP} XP</span>
+                </div>
+                <div className="w-full bg-dark-bg rounded-full h-2">
+                  <div
+                    className="h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${progressPercentage}%`, background: `linear-gradient(90deg, ${currentLevel.color}, ${nextLevel?.color || currentLevel.color})` }}
+                  ></div>
+                </div>
+                {nextLevel && (
+                  <p className="text-xs text-gray-500 mt-1">{nextLevel.minXP - (user?.stats?.xp || 0)} XP to {nextLevel.name}</p>
+                )}
+              </div>
             </div>
-            <div className="w-full bg-dark-bg rounded-full h-3">
-              <div
-                className="h-3 rounded-full transition-all duration-500"
-                style={{ width: `${progressPercentage}%`, background: `linear-gradient(90deg, ${currentLevel.color}, ${nextLevel?.color || currentLevel.color})` }}
-              ></div>
-            </div>
-            {nextLevel && (
-              <p className="text-xs text-gray-500 mt-1">{nextLevel.minXP - (user?.stats?.xp || 0)} XP to {nextLevel.name}</p>
-            )}
           </div>
 
           <div className="grid grid-cols-3 gap-3 text-center">
