@@ -170,6 +170,7 @@ function DashboardContent() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
           className="glass-card p-4"
         >
           <div className="text-3xl mb-1">🔥</div>
@@ -183,6 +184,7 @@ function DashboardContent() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
           className="glass-card p-4"
         >
           <div className="text-3xl mb-1">💪</div>
@@ -193,6 +195,7 @@ function DashboardContent() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
           className="glass-card p-4"
         >
           <div className="text-3xl mb-1">🔥</div>
@@ -203,6 +206,7 @@ function DashboardContent() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
           className="glass-card p-4"
         >
           <div className="text-3xl mb-1">⚖️</div>
@@ -213,6 +217,7 @@ function DashboardContent() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
           className="glass-card p-4"
         >
           <div className="text-3xl mb-1">📊</div>
@@ -223,6 +228,7 @@ function DashboardContent() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
           className="glass-card p-4"
         >
           <div className="text-3xl mb-1">⚖️</div>
