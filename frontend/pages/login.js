@@ -37,6 +37,21 @@ export default function Login() {
       <div className="absolute inset-0 gradient-bg"></div>
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-green/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-purple/10 rounded-full blur-3xl"></div>
+      {[...Array(12)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full opacity-20"
+          style={{
+            width: `${4 + (i % 4) * 2}px`,
+            height: `${4 + (i % 4) * 2}px`,
+            background: i % 2 === 0 ? '#39ff14' : '#b026ff',
+            left: `${10 + (i * 7) % 80}%`,
+            top: `${5 + (i * 11) % 90}%`,
+            animation: `float ${3 + (i % 3)}s ease-in-out infinite`,
+            animationDelay: `${i * 0.3}s`,
+          }}
+        />
+      ))}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
