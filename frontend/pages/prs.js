@@ -95,9 +95,15 @@ function PRsContent() {
 
       {prs.length === 0 ? (
         <div className="glass-card p-12 text-center">
-          <div className="text-7xl mb-4">🏆</div>
+          <div className="text-7xl mb-4 inline-block" style={{ animation: 'trophyPulse 2s ease-in-out infinite' }}>🏆</div>
           <h3 className="text-xl font-heading font-bold mb-2">No PRs Yet</h3>
-          <p className="text-gray-400">Start logging your personal records!</p>
+          <p className="text-gray-400 mb-6">Start logging your personal records!</p>
+          <button
+            onClick={() => setShowAdd(true)}
+            className="px-6 py-3 bg-neon-green text-black font-bold rounded-lg hover:bg-neon-green/90"
+          >
+            Log First PR
+          </button>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
