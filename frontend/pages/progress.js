@@ -435,32 +435,43 @@ function ProgressContent() {
                 </tr>
               </thead>
               <tbody>
-                {progressData.slice(0, 10).map((entry, index) => (
-                  <tr key={index} className="border-b border-gray-800">
-                    <td className="py-3">{new Date(entry.date).toLocaleDateString()}</td>
-                    <td className="py-3 text-right text-neon-green">{entry.weight || '-'} kg</td>
-                    <td className="py-3 text-right">{entry.chest || '-'} cm</td>
-                    <td className="py-3 text-right">{entry.arms || '-'} cm</td>
-                    <td className="py-3 text-right">{entry.waist || '-'} cm</td>
-                    <td className="py-3 text-right">{entry.bodyFat || '-'}%</td>
-                    <td className="py-3 text-right">
-                      <button
-                        onClick={async () => {
-                          try {
-                            await progressAPI.deleteProgress(entry._id);
-                            toast.success('Entry deleted');
-                            fetchProgress();
-                          } catch (error) {
-                            toast.error('Failed to delete');
-                          }
-                        }}
-                        className="text-gray-500 hover:text-red-400 text-sm"
-                      >
-                        🗑️
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {progressData.slice(0, 10).map((entry, index) => {
+                  const prevWeight = progressData[index + 1]?.weight;
+                  const weightDiff = entry.weight && prevWeight ? (entry.weight - prevWeight).toFixed(1) : null;
+                  return (
+                    <tr key={index} className="border-b border-gray-800">
+                      <td className="py-3">{new Date(entry.date).toLocaleDateString()}</td>
+                      <td className="py-3 text-right">
+                        <span className="text-neon-green">{entry.weight || '-'}</span>
+                        {weightDiff && (
+                          <span className={`ml-1 text-xs ${parseFloat(weightDiff) > 0 ? 'text-red-400' : parseFloat(weightDiff) < 0 ? 'text-green-400' : 'text-gray-400'}`}>
+                            {parseFloat(weightDiff) > 0 ? '▲' : parseFloat(weightDiff) < 0 ? '▼' : '—'}{Math.abs(parseFloat(weightDiff))}kg
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3 text-right">{entry.chest || '-'} cm</td>
+                      <td className="py-3 text-right">{entry.arms || '-'} cm</td>
+                      <td className="py-3 text-right">{entry.waist || '-'} cm</td>
+                      <td className="py-3 text-right">{entry.bodyFat || '-'}%</td>
+                      <td className="py-3 text-right">
+                        <button
+                          onClick={async () => {
+                            try {
+                              await progressAPI.deleteProgress(entry._id);
+                              toast.success('Entry deleted');
+                              fetchProgress();
+                            } catch (error) {
+                              toast.error('Failed to delete');
+                            }
+                          }}
+                          className="text-gray-500 hover:text-red-400 text-sm"
+                        >
+                          🗑️
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
