@@ -229,6 +229,18 @@ function NutritionContent() {
             <span className="text-3xl font-bold text-cyan-400">{waterIntake}</span>
             <span className="text-gray-400">/ {targets.waterGoal} glasses</span>
           </div>
+          <div className="flex justify-center gap-1 mb-3">
+            {Array.from({ length: targets.waterGoal }, (_, i) => (
+              <div
+                key={i}
+                className={`w-5 h-7 rounded-b-lg border-2 transition-all duration-300 ${
+                  i < waterIntake
+                    ? 'bg-cyan-400/80 border-cyan-400'
+                    : 'bg-transparent border-gray-600'
+                }`}
+              />
+            ))}
+          </div>
           <div className="flex justify-center gap-1 mb-2">
             <button onClick={() => updateWater(Math.max(0, waterIntake - 1))} className="px-3 py-1 bg-gray-700 rounded">-</button>
             <button onClick={() => updateWater(waterIntake + 1)} className="px-3 py-1 bg-neon-green text-black rounded font-bold">+1</button>
