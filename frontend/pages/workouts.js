@@ -307,6 +307,11 @@ function WorkoutsContent() {
                   <p className="text-gray-400 text-sm">
                     {new Date(workout.date).toLocaleDateString()} | {workout.exercises.length} exercises{workout.duration ? ` | ${workout.duration}min` : ''}
                   </p>
+                  <div className="flex gap-1 mt-1 flex-wrap">
+                    {[...new Set(workout.exercises.map(e => e.muscleGroup || 'other'))].map(mg => (
+                      <span key={mg} className="px-1.5 py-0.5 text-[10px] bg-neon-purple/20 text-neon-purple rounded capitalize">{mg}</span>
+                    ))}
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <button
