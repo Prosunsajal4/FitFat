@@ -82,12 +82,15 @@ export default function Layout({ children }) {
                     <Link
                       href={item.path}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all relative ${
                         router.pathname === item.path
                           ? 'bg-neon-green/20 text-neon-green border border-neon-green/30'
                           : 'text-gray-400 hover:bg-dark-card hover:text-white'
                       }`}
                     >
+                      {router.pathname === item.path && (
+                        <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-neon-green rounded-r-full" />
+                      )}
                       <span className="text-xl">{item.icon}</span>
                       <span className="font-medium">{item.name}</span>
                     </Link>
