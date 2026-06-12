@@ -163,8 +163,8 @@ function SettingsContent() {
             ))}
           </div>
 
-          <div className="mt-6 p-4 bg-dark-bg rounded-lg">
-            <h4 className="font-bold text-sm mb-2">Protein Recommendation</h4>
+          <div className="mt-6 pt-4 border-t border-gray-700">
+            <h4 className="font-bold text-sm mb-2">💡 Protein Recommendation</h4>
             <p className="text-xs text-gray-400">
               Based on your weight ({user?.body?.weight || 70}kg):
             </p>
