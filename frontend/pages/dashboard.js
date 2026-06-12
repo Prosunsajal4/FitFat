@@ -171,7 +171,7 @@ function DashboardContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="glass-card p-4"
+          className={`glass-card p-4 ${(stats?.userStats?.streak || 0) > 0 ? 'border-neon-green/40 shadow-neon-green' : ''}`}
         >
           <div className="text-3xl mb-1">🔥</div>
           <p className="text-2xl font-bold text-neon-green">{stats?.userStats?.streak || 0}</p>
