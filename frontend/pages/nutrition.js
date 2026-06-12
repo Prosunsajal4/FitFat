@@ -176,10 +176,23 @@ function NutritionContent() {
               </div>
             </div>
           </div>
-          <p className="text-center mt-2">
-            <span className="text-neon-green font-bold">{totalCalories}</span>
-            <span className="text-gray-400"> / {targets.dailyCalorieTarget} kcal</span>
-          </p>
+          <div className="mt-3">
+            <div className="flex justify-between text-xs mb-1">
+              <span className="text-gray-400">{totalCalories} kcal</span>
+              <span className="text-gray-400">{targets.dailyCalorieTarget} kcal</span>
+            </div>
+            <div className="h-2 bg-dark-bg rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{
+                  width: `${Math.min((totalCalories / targets.dailyCalorieTarget) * 100, 100)}%`,
+                  background: totalCalories > targets.dailyCalorieTarget
+                    ? 'linear-gradient(90deg, #ff4444, #ff6b6b)'
+                    : 'linear-gradient(90deg, #39ff14, #00c8ff)',
+                }}
+              ></div>
+            </div>
+          </div>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-4">
