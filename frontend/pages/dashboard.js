@@ -266,7 +266,17 @@ function DashboardContent() {
           <h3 className="font-heading font-bold text-lg mb-4">Last Workout</h3>
           <div className="flex items-center justify-between mb-3">
             <h4 className="text-neon-green font-bold text-lg">{lastWorkout.name}</h4>
-            <span className="text-gray-400 text-sm">{new Date(lastWorkout.date).toLocaleDateString()}</span>
+            <span className="text-gray-400 text-sm">
+              {(() => {
+                const diff = Date.now() - new Date(lastWorkout.date).getTime();
+                const hours = Math.floor(diff / 3600000);
+                if (hours < 1) return 'Just now';
+                if (hours < 24) return `${hours}h ago`;
+                const days = Math.floor(hours / 24);
+                if (days === 1) return 'Yesterday';
+                return `${days} days ago`;
+              })()}
+            </span>
           </div>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
