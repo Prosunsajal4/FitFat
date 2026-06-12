@@ -192,6 +192,22 @@ function MuscleBalanceContent() {
           <div className="h-72">
             <Bar data={chartData} options={chartOptions} />
           </div>
+          <div className="mt-4 space-y-2">
+            {muscleGroups.map((muscle) => {
+              const volume = stats?.muscleGroups?.[muscle.id] || 0;
+              const max = Math.max(...Object.values(stats?.muscleGroups || {}));
+              const pct = max > 0 ? Math.round((volume / max) * 100) : 0;
+              return (
+                <div key={muscle.id} className="flex items-center gap-3">
+                  <span className="text-xs text-gray-400 w-20 capitalize">{muscle.name}</span>
+                  <div className="flex-1 h-2 bg-dark-bg rounded-full overflow-hidden">
+                    <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: getMuscleColor(muscle.id) }} />
+                  </div>
+                  <span className="text-xs text-gray-500 w-16 text-right">{volume.toLocaleString()}</span>
+                </div>
+              );
+            })}
+          </div>
         </motion.div>
       </div>
 
