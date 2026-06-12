@@ -6,12 +6,12 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import DBStatusBanner from '../components/DBStatusBanner';
 
 const workoutTypes = [
-  { id: 'Push', nameBn: 'পুশ ডে', nameEn: 'Push Day', icon: '💪', descBn: 'বুক, কাঁধ, ট্রাইসেপস', descEn: 'Chest, Shoulders, Triceps' },
-  { id: 'Pull', nameBn: 'পুল ডে', nameEn: 'Pull Day', icon: '🏋️', descBn: 'পিঠ, বাইসেপস', descEn: 'Back, Biceps' },
-  { id: 'Legs', nameBn: 'লেগ ডে', nameEn: 'Leg Day', icon: '🦵', descBn: 'পায়ের পেশী', descEn: 'Quads, Hamstrings, Calves' },
-  { id: 'Full', nameBn: 'ফুল বডি', nameEn: 'Full Body', icon: '🔥', descBn: 'পুরো শরীর', descEn: 'Full Body Workout' },
-  { id: 'Cardio', nameBn: 'কার্ডিও', nameEn: 'Cardio Day', icon: '🏃', descBn: 'দৌড়, সাইকেল, HIIT', descEn: 'Running, Cycling, HIIT' },
-  { id: 'Rest', nameBn: 'রেস্ট ডে', nameEn: 'Rest Day', icon: '😴', descBn: 'বিশ্রাম ও রিকভারি', descEn: 'Recovery & Rest' },
+  { id: 'Push', nameBn: 'পুশ ডে', nameEn: 'Push Day', icon: '💪', descBn: 'বুক, কাঁধ, ট্রাইসেপস', descEn: 'Chest, Shoulders, Triceps', color: '#ff4444' },
+  { id: 'Pull', nameBn: 'পুল ডে', nameEn: 'Pull Day', icon: '🏋️', descBn: 'পিঠ, বাইসেপস', descEn: 'Back, Biceps', color: '#39ff14' },
+  { id: 'Legs', nameBn: 'লেগ ডে', nameEn: 'Leg Day', icon: '🦵', descBn: 'পায়ের পেশী', descEn: 'Quads, Hamstrings, Calves', color: '#b026ff' },
+  { id: 'Full', nameBn: 'ফুল বডি', nameEn: 'Full Body', icon: '🔥', descBn: 'পুরো শরীর', descEn: 'Full Body Workout', color: '#ffaa00' },
+  { id: 'Cardio', nameBn: 'কার্ডিও', nameEn: 'Cardio Day', icon: '🏃', descBn: 'দৌড়, সাইকেল, HIIT', descEn: 'Running, Cycling, HIIT', color: '#00c8ff' },
+  { id: 'Rest', nameBn: 'রেস্ট ডে', nameEn: 'Rest Day', icon: '😴', descBn: 'বিশ্রাম ও রিকভারি', descEn: 'Recovery & Rest', color: '#888888' },
 ];
 
 const mealHeaders = {
@@ -84,9 +84,10 @@ function DietContent() {
             onClick={() => setSelectedWorkout(type.id)}
             className={`p-4 rounded-xl text-center transition-all ${
               selectedWorkout === type.id
-                ? 'bg-neon-green/20 border-2 border-neon-green text-neon-green'
+                ? 'border-2 text-white'
                 : 'glass-card hover:bg-dark-card'
             }`}
+            style={selectedWorkout === type.id ? { borderColor: type.color, backgroundColor: `${type.color}20`, boxShadow: `0 0 20px ${type.color}30` } : {}}
           >
             <div className="text-2xl mb-1">{type.icon}</div>
             <p className="text-sm font-bold">{lang === 'bn' ? type.nameBn : type.nameEn}</p>
