@@ -192,11 +192,11 @@ function DietContent() {
               className="glass-card p-6 border-l-4 border-neon-purple"
             >
               <h3 className="text-xl font-bold mb-4">{lang === 'bn' ? '💡 টিপস' : '💡 Tips'}</h3>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {dietPlan.tips.map((tip, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-neon-green mt-1">✓</span>
-                    <span>{tip}</span>
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="w-6 h-6 rounded-full bg-neon-purple/20 text-neon-purple text-xs flex items-center justify-center font-bold flex-shrink-0 mt-0.5">{i + 1}</span>
+                    <span className="text-sm text-gray-300">{tip}</span>
                   </li>
                 ))}
               </ul>
