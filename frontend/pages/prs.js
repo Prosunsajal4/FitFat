@@ -16,6 +16,16 @@ const muscleColors = {
   other: 'border-gray-500',
 };
 
+const muscleDots = {
+  chest: 'bg-red-500',
+  back: 'bg-blue-500',
+  legs: 'bg-green-500',
+  shoulders: 'bg-yellow-500',
+  arms: 'bg-purple-500',
+  core: 'bg-orange-500',
+  other: 'bg-gray-500',
+};
+
 function PRsContent() {
   const [prs, setPrs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -118,7 +128,10 @@ function PRsContent() {
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h3 className="font-bold text-lg">{pr.exercise}</h3>
-                  <span className="text-xs text-gray-400 capitalize">{pr.muscleGroup}</span>
+                  <span className="text-xs text-gray-400 capitalize flex items-center gap-1.5">
+                    <span className={`w-2 h-2 rounded-full ${muscleDots[pr.muscleGroup] || muscleDots.other}`}></span>
+                    {pr.muscleGroup}
+                  </span>
                 </div>
                 <button onClick={() => deletePR(pr.exercise)} className="text-gray-500 hover:text-red-400 text-sm">✕</button>
               </div>
