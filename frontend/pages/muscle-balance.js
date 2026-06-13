@@ -217,8 +217,9 @@ function MuscleBalanceContent() {
           <p className="text-gray-400 mb-4">These muscle groups are receiving high volume. Consider reducing to prevent overtraining:</p>
           <div className="flex flex-wrap gap-2">
             {getOvertrainedMuscles().map((muscle) => (
-              <span key={muscle} className="px-4 py-2 bg-red-500/20 border border-red-500 rounded-full capitalize">
+              <span key={muscle} className="px-4 py-2 bg-red-500/20 border border-red-500 rounded-full capitalize flex items-center gap-2">
                 {muscle}
+                <span className="text-xs text-red-400/80">({(stats?.muscleGroups?.[muscle] || 0).toLocaleString()})</span>
               </span>
             ))}
           </div>
@@ -231,8 +232,9 @@ function MuscleBalanceContent() {
           <p className="text-gray-400 mb-4">These muscle groups need more attention for balanced development:</p>
           <div className="flex flex-wrap gap-2">
             {getNeglectedMuscles().map((muscle) => (
-              <span key={muscle} className="px-4 py-2 bg-yellow-500/20 border border-yellow-500 rounded-full capitalize">
+              <span key={muscle} className="px-4 py-2 bg-yellow-500/20 border border-yellow-500 rounded-full capitalize flex items-center gap-2">
                 {muscle}
+                <span className="text-xs text-yellow-400/80">({(stats?.muscleGroups?.[muscle] || 0).toLocaleString()})</span>
               </span>
             ))}
           </div>
