@@ -5,11 +5,11 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import DBStatusBanner from '../components/DBStatusBanner';
 
 const quickQuestions = [
-  "What should I train today?",
-  "Am I overtraining?",
-  "Help me with my diet",
-  "Why is my progress stalling?",
-  "Give me a motivation boost",
+  { q: "What should I train today?", icon: "🏋️" },
+  { q: "Am I overtraining?", icon: "⚠️" },
+  { q: "Help me with my diet", icon: "🥗" },
+  { q: "Why is my progress stalling?", icon: "📊" },
+  { q: "Give me a motivation boost", icon: "🔥" },
 ];
 
 function CoachContent() {
@@ -195,14 +195,15 @@ function CoachContent() {
           <div className="glass-card p-4">
             <h3 className="font-bold mb-3">Quick Questions</h3>
             <div className="space-y-2">
-              {quickQuestions.map((q, index) => (
+              {quickQuestions.map((item, index) => (
                 <button
                   key={index}
-                  onClick={() => sendMessage(q)}
+                  onClick={() => sendMessage(item.q)}
                   disabled={loading}
-                  className="w-full text-left p-3 bg-dark-bg rounded-lg text-sm hover:bg-dark-card transition-colors disabled:opacity-50"
+                  className="w-full text-left p-3 bg-dark-bg rounded-lg text-sm hover:bg-dark-card transition-colors disabled:opacity-50 flex items-center gap-2"
                 >
-                  {q}
+                  <span>{item.icon}</span>
+                  <span>{item.q}</span>
                 </button>
               ))}
             </div>
