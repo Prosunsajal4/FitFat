@@ -265,7 +265,10 @@ function NutritionContent() {
                 const meals = todayData?.meals?.filter((m) => m.type === type) || [];
                 return (
                   <div key={type} className="bg-dark-bg p-3 rounded-lg">
-                    <h4 className="text-neon-purple capitalize mb-2">{type}</h4>
+                    <h4 className="text-neon-purple capitalize mb-2 flex items-center gap-2">
+                      <span>{type === 'breakfast' ? '🌅' : type === 'lunch' ? '🍛' : type === 'dinner' ? '🌙' : '🍎'}</span>
+                      {type}
+                    </h4>
                     {meals.length === 0 ? (
                       <p className="text-gray-500 text-sm">No meals logged</p>
                     ) : (
