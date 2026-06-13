@@ -65,11 +65,11 @@ function AIWorkoutContent() {
                 onChange={(e) => setFormData({ ...formData, goal: e.target.value })}
                 className="w-full px-4 py-2 rounded-lg"
               >
-                <option value="bulking">Muscle Building (Bulking)</option>
-                <option value="cutting">Fat Loss (Cutting)</option>
-                <option value="strength">Strength Training</option>
-                <option value="fat_loss">Fat Loss</option>
-                <option value="maintenance">Maintenance</option>
+                <option value="bulking">💪 Muscle Building (Bulking)</option>
+                <option value="cutting">🔥 Fat Loss (Cutting)</option>
+                <option value="strength">🏋️ Strength Training</option>
+                <option value="fat_loss">📉 Fat Loss</option>
+                <option value="maintenance">⚖️ Maintenance</option>
               </select>
               <p className="text-sm text-gray-500 mt-1">{getGoalDescription(formData.goal)}</p>
             </div>
