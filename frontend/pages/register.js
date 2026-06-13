@@ -52,6 +52,21 @@ export default function Register() {
       <div className="absolute inset-0 gradient-bg"></div>
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-neon-purple/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-neon-green/10 rounded-full blur-3xl"></div>
+      {[...Array(10)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full opacity-20"
+          style={{
+            width: `${3 + (i % 4) * 2}px`,
+            height: `${3 + (i % 4) * 2}px`,
+            background: i % 2 === 0 ? '#b026ff' : '#39ff14',
+            left: `${8 + (i * 9) % 84}%`,
+            top: `${3 + (i * 13) % 94}%`,
+            animation: `float ${3 + (i % 3)}s ease-in-out infinite`,
+            animationDelay: `${i * 0.4}s`,
+          }}
+        />
+      ))}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
