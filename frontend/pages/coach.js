@@ -115,14 +115,19 @@ function CoachContent() {
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] p-4 rounded-lg ${
+                    className={`max-w-[80%] p-4 rounded-2xl ${
                       msg.role === 'user'
-                        ? 'bg-neon-green/20 border border-neon-green/30 text-white'
-                        : 'bg-dark-bg border border-gray-700 text-gray-200'
+                        ? 'bg-neon-green/20 border border-neon-green/30 text-white rounded-br-sm'
+                        : 'bg-dark-bg border border-gray-700 text-gray-200 rounded-bl-sm'
                     }`}
                   >
-                    <div className="text-sm mb-1 opacity-50">{msg.role === 'user' ? 'You' : 'FitFat AI'}</div>
-                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                    <div className="flex items-center gap-2 text-xs mb-1 opacity-50">
+                      <span className={`w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold ${msg.role === 'user' ? 'bg-neon-green text-black' : 'bg-neon-purple text-white'}`}>
+                        {msg.role === 'user' ? 'U' : 'AI'}
+                      </span>
+                      {msg.role === 'user' ? 'You' : 'FitFat AI'}
+                    </div>
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.content}</p>
                   </div>
                 </motion.div>
               ))}
