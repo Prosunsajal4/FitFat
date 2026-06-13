@@ -294,7 +294,10 @@ function ProgressContent() {
                   : 'border-blue-500'
               }`}
             >
-              <p className="text-sm text-gray-400 uppercase mb-1">{pred.type}</p>
+              <p className="text-sm text-gray-400 uppercase mb-1 flex items-center gap-2">
+                <span>{pred.type === 'consistency' ? '🔥' : pred.type === 'weight_gain' ? '📈' : pred.type === 'weight_loss' ? '📉' : '💡'}</span>
+                {pred.type}
+              </p>
               <p className="text-gray-200">{pred.message}</p>
             </motion.div>
           ))}
