@@ -207,17 +207,25 @@ function NutritionContent() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-4">
-          <h3 className="font-bold mb-3">Protein</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-bold">Protein</h3>
+            <span className="text-xs text-gray-400">{Math.round((totalProtein / targets.proteinTarget) * 100)}%</span>
+          </div>
           <div className="relative h-20">
             <div className="absolute inset-0 bg-dark-bg rounded-full overflow-hidden">
               <div
-                className="h-full bg-neon-green transition-all"
-                style={{ width: `${Math.min((totalProtein / targets.proteinTarget) * 100, 100)}%` }}
+                className="h-full transition-all duration-500 rounded-full"
+                style={{
+                  width: `${Math.min((totalProtein / targets.proteinTarget) * 100, 100)}%`,
+                  background: totalProtein >= targets.proteinTarget
+                    ? 'linear-gradient(90deg, #39ff14, #00c8ff)'
+                    : 'linear-gradient(90deg, #b026ff, #39ff14)',
+                }}
               ></div>
             </div>
           </div>
           <p className="text-center mt-2">
-            <span className="text-neon-green font-bold">{totalProtein}</span>
+            <span className="text-neon-green font-bold">{totalProtein}g</span>
             <span className="text-gray-400"> / {targets.proteinTarget}g</span>
           </p>
         </motion.div>
