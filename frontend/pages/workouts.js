@@ -359,7 +359,7 @@ function WorkoutsContent() {
                   <tbody>
                     {workout.exercises.map((ex, i) => (
                       <Fragment key={i}>
-                      <tr className="border-b border-gray-800">
+                      <tr className="border-b border-gray-800 hover:bg-white/[0.02] transition-colors">
                         <td className="py-2">{ex.name}</td>
                         <td className="py-2">
                           <span className="px-2 py-1 bg-dark-bg rounded text-xs capitalize">
