@@ -106,16 +106,16 @@ function AIWorkoutContent() {
                 />
               </div>
               <div>
-                <label className="block text-gray-400 mb-2">Experience</label>
-                <select
-                  value={formData.experience}
-                  onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg"
-                >
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                </select>
+              <label className="block text-gray-400 mb-2">Experience</label>
+              <select
+                value={formData.experience}
+                onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg"
+              >
+                <option value="beginner">🌱 Beginner</option>
+                <option value="intermediate">🌿 Intermediate</option>
+                <option value="advanced">🌳 Advanced</option>
+              </select>
               </div>
             </div>
 
