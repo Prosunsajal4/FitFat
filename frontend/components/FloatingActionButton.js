@@ -22,11 +22,18 @@ export default function FloatingActionButton() {
             exit={{ opacity: 0, y: 20 }}
             className="absolute bottom-16 right-0 space-y-2"
           >
-            {actions.map((action) => (
-              <Link key={action.label} href={action.href} onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-gray-700 rounded-full text-sm whitespace-nowrap shadow-lg">
-                <span>{action.icon}</span>
-                <span>{action.label}</span>
-              </Link>
+            {actions.map((action, i) => (
+              <motion.div
+                key={action.label}
+                initial={{ opacity: 0, x: 20, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ delay: i * 0.05 }}
+              >
+                <Link href={action.href} onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-gray-700 rounded-full text-sm whitespace-nowrap shadow-lg hover:border-neon-green/30 transition-colors">
+                  <span>{action.icon}</span>
+                  <span>{action.label}</span>
+                </Link>
+              </motion.div>
             ))}
           </motion.div>
         )}
