@@ -150,7 +150,7 @@ function ProfileContent() {
             {Object.entries(badges).map(([key, badge]) => {
               const earned = user?.stats?.badges?.includes(key);
               return (
-                <div key={key} className={`flex items-center gap-3 p-3 rounded-lg ${earned ? 'bg-neon-green/10 border border-neon-green/30' : 'bg-dark-bg opacity-50'}`}>
+                <div key={key} className={`flex items-center gap-3 p-3 rounded-lg transition-all ${earned ? 'bg-neon-green/10 border border-neon-green/30 hover:border-neon-green/50 hover:shadow-neon-green' : 'bg-dark-bg opacity-40'}`}>
                   <span className="text-2xl">{badge.icon}</span>
                   <div>
                     <p className={`font-bold text-sm ${earned ? 'text-neon-green' : 'text-gray-500'}`}>{badge.name}</p>
