@@ -363,31 +363,31 @@ function DashboardContent() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <a
             href="/workouts"
-            className="p-4 bg-dark-bg rounded-lg text-center hover:bg-neon-green/20 transition-all"
+            className="p-4 bg-dark-bg rounded-lg text-center hover:bg-neon-green/20 transition-all group"
           >
-            <div className="text-2xl mb-2">➕</div>
-            <p className="text-sm">New Workout</p>
+            <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">➕</div>
+            <p className="text-sm font-medium">New Workout</p>
           </a>
           <a
             href="/ai-workout"
-            className="p-4 bg-dark-bg rounded-lg text-center hover:bg-neon-purple/20 transition-all"
+            className="p-4 bg-dark-bg rounded-lg text-center hover:bg-neon-purple/20 transition-all group"
           >
-            <div className="text-2xl mb-2">🤖</div>
-            <p className="text-sm">AI Plan</p>
+            <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">🤖</div>
+            <p className="text-sm font-medium">AI Plan</p>
           </a>
           <a
             href="/nutrition"
-            className="p-4 bg-dark-bg rounded-lg text-center hover:bg-blue-500/20 transition-all"
+            className="p-4 bg-dark-bg rounded-lg text-center hover:bg-blue-500/20 transition-all group"
           >
-            <div className="text-2xl mb-2">🥗</div>
-            <p className="text-sm">Log Food</p>
+            <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">🥗</div>
+            <p className="text-sm font-medium">Log Food</p>
           </a>
           <a
             href="/coach"
-            className="p-4 bg-dark-bg rounded-lg text-center hover:bg-yellow-500/20 transition-all"
+            className="p-4 bg-dark-bg rounded-lg text-center hover:bg-yellow-500/20 transition-all group"
           >
-            <div className="text-2xl mb-2">💬</div>
-            <p className="text-sm">Ask AI</p>
+            <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">💬</div>
+            <p className="text-sm font-medium">Ask AI</p>
           </a>
         </div>
       </motion.div>
