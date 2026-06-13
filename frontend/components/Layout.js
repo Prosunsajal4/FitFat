@@ -48,7 +48,7 @@ export default function Layout({ children }) {
           >
             <div className="flex items-center justify-between p-4 border-b border-gray-800">
               <Link href="/dashboard">
-                <h1 className="text-2xl font-heading font-bold gradient-text">FitFat</h1>
+                <h1 className="text-2xl font-heading font-bold gradient-text hover:animate-glow-pulse transition-all">FitFat</h1>
               </Link>
           <button
             onClick={() => { setMobileMenuOpen(false); setSidebarOpen(false); }}
