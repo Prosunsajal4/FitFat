@@ -157,20 +157,40 @@ function AnalyticsContent() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-4">
-          <p className="text-gray-400 text-sm">Total Workouts</p>
-          <p className="text-3xl font-bold text-neon-green">{stats?.totalWorkouts || 0}</p>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">💪</span>
+            <div>
+              <p className="text-gray-400 text-xs">Total Workouts</p>
+              <p className="text-2xl font-bold text-neon-green">{stats?.totalWorkouts || 0}</p>
+            </div>
+          </div>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-4">
-          <p className="text-gray-400 text-sm">This Week</p>
-          <p className="text-3xl font-bold text-neon-purple">{stats?.weeklyWorkouts || 0}</p>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">📅</span>
+            <div>
+              <p className="text-gray-400 text-xs">This Week</p>
+              <p className="text-2xl font-bold text-neon-purple">{stats?.weeklyWorkouts || 0}</p>
+            </div>
+          </div>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-4">
-          <p className="text-gray-400 text-sm">Consistency</p>
-          <p className="text-3xl font-bold text-cyan-400">{getConsistencyPercentage()}%</p>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">📊</span>
+            <div>
+              <p className="text-gray-400 text-xs">Consistency</p>
+              <p className="text-2xl font-bold text-cyan-400">{getConsistencyPercentage()}%</p>
+            </div>
+          </div>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-4">
-          <p className="text-gray-400 text-sm">Avg Daily Cal</p>
-          <p className="text-3xl font-bold text-orange-400">{getAverageCalories()}</p>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🔥</span>
+            <div>
+              <p className="text-gray-400 text-xs">Avg Daily Cal</p>
+              <p className="text-2xl font-bold text-orange-400">{getAverageCalories()}</p>
+            </div>
+          </div>
         </motion.div>
       </div>
 
