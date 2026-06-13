@@ -250,11 +250,13 @@ function AnalyticsContent() {
         <h3 className="font-heading font-bold text-lg mb-4">Performance Summary</h3>
         <div className="grid md:grid-cols-3 gap-4">
           <div className="text-center p-4 bg-dark-bg rounded-lg">
-            <p className="text-gray-400 mb-1">Weekly Calories Burned</p>
+            <span className="text-2xl">🔥</span>
+            <p className="text-gray-400 mb-1 text-sm">Weekly Calories Burned</p>
             <p className="text-2xl font-bold text-neon-purple">{stats?.weeklyCalories || 0}</p>
           </div>
           <div className="text-center p-4 bg-dark-bg rounded-lg">
-            <p className="text-gray-400 mb-1">Last Workout</p>
+            <span className="text-2xl">📅</span>
+            <p className="text-gray-400 mb-1 text-sm">Last Workout</p>
             <p className="text-2xl font-bold text-neon-green">
               {stats?.lastWorkoutDate
                 ? new Date(stats.lastWorkoutDate).toLocaleDateString()
@@ -262,7 +264,8 @@ function AnalyticsContent() {
             </p>
           </div>
           <div className="text-center p-4 bg-dark-bg rounded-lg">
-            <p className="text-gray-400 mb-1">Total Volume</p>
+            <span className="text-2xl">🏋️</span>
+            <p className="text-gray-400 mb-1 text-sm">Total Volume</p>
             <p className="text-2xl font-bold text-cyan-400">
               {Object.values(stats?.muscleGroups || {}).reduce((a, b) => a + b, 0).toLocaleString()}
             </p>
