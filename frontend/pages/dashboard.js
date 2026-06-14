@@ -14,7 +14,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { useAuth } from '../context/AuthContext';
-import api from '../services/api';
+import { workoutAPI, aiAPI, progressAPI } from '../services/api';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { SkeletonCard, SkeletonChart } from '../components/Skeleton';
 import DBStatusBanner from '../components/DBStatusBanner';
