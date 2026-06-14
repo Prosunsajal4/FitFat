@@ -24,7 +24,7 @@ function CoachContent() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, loading]);
 
   const fetchChatHistory = async () => {
     try {
