@@ -48,7 +48,6 @@ function NutritionContent() {
       setTodayData(todayRes.data);
       setWeeklyData(weeklyRes.data);
     } catch (error) {
-      console.error('Error fetching nutrition:', error);
     } finally {
       setLoading(false);
     }

@@ -39,7 +39,6 @@ function DietContent() {
       const res = await dietAPI.getDietPlan(workoutType, lang);
       setDietPlan(res.data);
     } catch (error) {
-      console.error('Error fetching diet plan:', error);
     } finally {
       setLoading(false);
     }

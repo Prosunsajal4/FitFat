@@ -57,7 +57,6 @@ function DashboardContent() {
       setWeightData(progressRes.data);
       if (workoutRes.data?.length > 0) setLastWorkout(workoutRes.data[0]);
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
     } finally {
       setLoading(false);
     }

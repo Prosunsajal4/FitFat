@@ -101,7 +101,6 @@ function WorkoutsContent() {
       });
       fetchWorkouts();
     } catch (error) {
-      console.error('Error saving workout:', error);
       toast.error('Failed to save workout');
     }
   };

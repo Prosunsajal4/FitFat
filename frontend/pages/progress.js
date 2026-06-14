@@ -152,7 +152,6 @@ function ProgressContent() {
       setChartData(chartRes.data);
       setPredictions(predRes.data.predictions || []);
     } catch (error) {
-      console.error('Error fetching progress:', error);
     } finally {
       setLoading(false);
     }
@@ -178,7 +177,6 @@ function ProgressContent() {
       setPhotoPreview({ front: '', side: '', back: '' });
       fetchProgress();
     } catch (error) {
-      console.error('Error adding progress:', error);
       toast.error('Failed to save progress');
     }
   };

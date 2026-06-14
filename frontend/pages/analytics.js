@@ -48,7 +48,6 @@ function AnalyticsContent() {
         nutrition: weeklyNutrition.data,
       });
     } catch (error) {
-      console.error('Error fetching analytics:', error);
     } finally {
       setLoading(false);
     }

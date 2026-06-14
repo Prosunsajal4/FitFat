@@ -40,7 +40,6 @@ function CoachContent() {
         ]);
       }
     } catch (error) {
-      console.error('Error fetching chat history:', error);
       setMessages([
         {
           role: 'assistant',
@@ -63,7 +62,6 @@ function CoachContent() {
       const aiMessage = { role: 'assistant', content: res.data.response };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
-      console.error('Error sending message:', error);
       setMessages((prev) => [
         ...prev,
         { role: 'assistant', content: 'Sorry, I\'m having trouble responding right now. Please try again!' },
@@ -83,7 +81,6 @@ function CoachContent() {
         },
       ]);
     } catch (error) {
-      console.error('Error clearing chat:', error);
     }
   };
 

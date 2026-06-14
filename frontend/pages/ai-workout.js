@@ -24,7 +24,6 @@ function AIWorkoutContent() {
       const res = await aiAPI.generateWorkoutPlan(formData);
       setPlan(res.data.plan);
     } catch (error) {
-      console.error('Error generating plan:', error);
     } finally {
       setLoading(false);
     }
