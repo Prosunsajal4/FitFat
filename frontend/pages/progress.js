@@ -224,7 +224,7 @@ function ProgressContent() {
   };
 
   const measurementsChartData = {
-    labels: chartData?.labels?.map((l) => l.slice(5)) || [],
+    labels: chartData?.labels?.map((l) => l?.slice(5)) || [],
     datasets: [
       {
         label: 'Chest (cm)',
