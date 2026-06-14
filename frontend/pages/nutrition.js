@@ -89,6 +89,7 @@ function NutritionContent() {
   const totalCarbs = todayData?.totalCarbs || 0;
   const totalFats = todayData?.totalFats || 0;
   const waterIntake = todayData?.waterIntake || 0;
+  const totalMeals = todayData?.meals?.length || 0;
 
   const calorieChartData = {
     labels: ['Consumed', 'Remaining'],
