@@ -322,19 +322,19 @@ function NutritionContent() {
             <div className="mt-4 grid grid-cols-4 gap-2 text-center text-sm">
               <div className="bg-dark-bg p-2 rounded">
                 <p className="text-gray-400">Avg Cal</p>
-                <p className="text-neon-green font-bold">{weeklyData.averages.calories}</p>
+                <p className="text-neon-green font-bold">{weeklyData.averages.calories || 0}</p>
               </div>
               <div className="bg-dark-bg p-2 rounded">
                 <p className="text-gray-400">Avg Protein</p>
-                <p className="text-neon-green font-bold">{weeklyData.averages.protein}g</p>
+                <p className="text-neon-green font-bold">{weeklyData.averages.protein || 0}g</p>
               </div>
               <div className="bg-dark-bg p-2 rounded">
                 <p className="text-gray-400">Avg Carbs</p>
-                <p className="text-neon-purple font-bold">{weeklyData.averages.carbs}g</p>
+                <p className="text-neon-purple font-bold">{weeklyData.averages.carbs || 0}g</p>
               </div>
               <div className="bg-dark-bg p-2 rounded">
                 <p className="text-gray-400">Avg Fats</p>
-                <p className="text-yellow-400 font-bold">{weeklyData.averages.fats}g</p>
+                <p className="text-yellow-400 font-bold">{weeklyData.averages.fats || 0}g</p>
               </div>
             </div>
           )}
