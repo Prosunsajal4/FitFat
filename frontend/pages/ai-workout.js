@@ -6,7 +6,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import DBStatusBanner from '../components/DBStatusBanner';
 
 function AIWorkoutContent() {
-  const { user, updateUser } = useAuth();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [plan, setPlan] = useState(null);
   const [formData, setFormData] = useState({
