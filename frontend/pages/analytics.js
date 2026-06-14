@@ -67,7 +67,7 @@ function AnalyticsContent() {
   };
 
   const workoutFrequencyData = {
-    labels: stats?.workoutFrequency?.map((d) => d.date.slice(5)) || [],
+    labels: stats?.workoutFrequency?.map((d) => d.date?.slice(5)) || [],
     datasets: [
       {
         label: 'Workouts',
