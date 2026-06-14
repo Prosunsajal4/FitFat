@@ -149,17 +149,6 @@ function CoachContent() {
                 </motion.div>
               )}
 
-              {loading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex items-center gap-1 px-4 py-3"
-                >
-                  <div className="w-2 h-2 bg-neon-green rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-2 h-2 bg-neon-green rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-2 h-2 bg-neon-green rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                </motion.div>
-              )}
               <div ref={messagesEndRef} />
             </div>
 
