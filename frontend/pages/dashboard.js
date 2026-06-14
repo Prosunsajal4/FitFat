@@ -64,7 +64,7 @@ function DashboardContent() {
   };
 
   const weeklyChartData = {
-    labels: stats?.workoutFrequency?.map((d) => d.date.slice(5)) || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    labels: stats?.workoutFrequency?.map((d) => d.date?.slice(5)) || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [
       {
         label: 'Workouts',
