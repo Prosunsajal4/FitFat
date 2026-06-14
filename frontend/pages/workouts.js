@@ -106,17 +106,6 @@ function WorkoutsContent() {
     }
   };
 
-  const deleteWorkout = async (id) => {
-    try {
-      await workoutAPI.deleteWorkout(id);
-      toast.success('Workout deleted!');
-      fetchWorkouts();
-    } catch (error) {
-      console.error('Error deleting workout:', error);
-      toast.error('Failed to delete workout');
-    }
-  };
-
   const handleDelete = async (id) => {
     setDeleteConfirm({ show: true, id });
   };
