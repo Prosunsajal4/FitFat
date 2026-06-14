@@ -290,7 +290,7 @@ function WorkoutsContent() {
         </div>
       ) : (
         <div className="grid gap-4">
-          {workouts.filter(w => w.name.toLowerCase().includes(searchQuery.toLowerCase())).map((workout, index) => (
+          {workouts.filter(w => w.name?.toLowerCase().includes(searchQuery.toLowerCase())).map((workout, index) => (
             <motion.div
               key={workout._id}
               initial={{ opacity: 0, y: 20 }}
