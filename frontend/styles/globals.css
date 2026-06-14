@@ -80,15 +80,6 @@ h1, h2, h3, h4, h5, h6 {
   background-clip: text;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
 input, select, textarea {
   background: rgba(26, 26, 26, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -100,14 +91,6 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
   border-color: var(--neon-green);
   box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
-}
-
-button {
-  transition: all 0.2s ease;
-}
-
-button:active {
-  transform: scale(0.97);
 }
 
 button {
