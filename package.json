@@ -1,0 +1,18 @@
+{
+  "name": "fitfat",
+  "version": "2.0.0",
+  "description": "AI-powered Gym & Fitness Tracker",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && node server.js",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "cd frontend && npm run build",
+    "lint": "cd frontend && npm run lint",
+    "test": "cd backend && npm test",
+    "clean": "cd frontend && rm -rf .next && cd ../backend && rm -rf coverage"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}
