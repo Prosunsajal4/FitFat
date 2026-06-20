@@ -1,9 +1,13 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
-  env: {
-    API_URL: process.env.API_URL || 'http://localhost:5000/api',
+  images: {
+    domains: ['localhost'],
+    unoptimized: true,
   },
-}
-
-module.exports = nextConfig
+  experimental: {
+    optimizeCss: false,
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+};
